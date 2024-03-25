@@ -13,6 +13,11 @@ const links = [
     glyph: "dashboard"
   },
   {
+    header: "Articles",
+    headerLink: "/app/articles",
+    glyph: "typography",
+  },
+  {
     header: "Typography",
     headerLink: "/app/typography",
     glyph: "typography"
