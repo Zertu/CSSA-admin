@@ -18,7 +18,10 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
   if (!childrenLinks) {
     return (
       <li className={cx(s.headerLink, className)}>
-        <NavLink to={headerLink} activeclassname={s.headerLinkActive}>
+        <NavLink
+          to={headerLink}
+          className={({ isActive }) => (isActive ? s.headerLinkActive : "")}
+        >
           <div>
             {glyph && <Icon glyph={glyph} />}
             <span>{header}</span>
@@ -52,7 +55,9 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
                 <NavLink
                   to={child.link}
                   onClick={() => setIsOpen(true)}
-                  activeclassname={s.headerLinkActive}
+                  className={({ isActive }) =>
+                    isActive ? s.headerLinkActive : ""
+                  }
                 >
                   {child.name}
                 </NavLink>
