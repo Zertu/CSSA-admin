@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 
 class ErrorPage extends React.Component {
-  static propTypes = {
-    error: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      message: PropTypes.string.isRequired,
-      stack: PropTypes.string.isRequired,
-    }).isRequired,
-  };
+  // static propTypes = {
+  //   error: PropTypes.shape({
+  //     name: PropTypes.string.isRequired,
+  //     message: PropTypes.string.isRequired,
+  //     stack: PropTypes.string.isRequired,
+  //   }).isRequired,
+  // };
 
   render() {
     return (
