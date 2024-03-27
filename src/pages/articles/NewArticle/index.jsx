@@ -44,7 +44,7 @@ const router = useNavigate();
         <BreadcrumbItem active>Articles</BreadcrumbItem>
       </Breadcrumb>
       
-      <div>
+      <div className="bg-white relative editor">
       <LexicalComposer initialConfig={initialConfig}>
       <Editor></Editor>
       </LexicalComposer>
