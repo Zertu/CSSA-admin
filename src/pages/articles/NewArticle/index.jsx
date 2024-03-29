@@ -17,15 +17,15 @@ import PlaygroundEditorTheme from '@/components/Editor/themes/PlaygroundEditorTh
 function Dashboard({ isFetching, posts }) {
 
 const router = useNavigate();
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [html, setHtml] = useState('');
   const formatDate = (str) => {
     return str.replace(/,.*$/,"");
   }
   const addNew = () => {
     console.log('new');
 }
-  const toggleDropdown = () => {
-    setIsDropdownOpened(prevState => !prevState);
+  const onChange = (state) => {
+    console.log(setHtml(state));
   }
   
   const {
@@ -50,7 +50,7 @@ const router = useNavigate();
       
       <div className="bg-white relative editor_container">
       <LexicalComposer initialConfig={initialConfig}>
-      <Editor></Editor>
+      <Editor onChange={onChange}></Editor>
       </LexicalComposer>
       </div>
       

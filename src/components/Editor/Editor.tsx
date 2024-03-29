@@ -5,7 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import {$getRoot, $getSelection} from 'lexical';
+import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
 import {CharacterLimitPlugin} from '@lexical/react/LexicalCharacterLimitPlugin';
 import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
@@ -25,6 +26,7 @@ import useLexicalEditable from '@lexical/react/useLexicalEditable';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {CAN_USE_DOM} from './shared/canUseDOM';
+import {$generateHtmlFromNodes} from '@lexical/html';
 
 import {createWebsocketProvider} from './collaboration';
 import {useSettings} from './context/SettingsContext';
@@ -45,6 +47,7 @@ import EmojiPickerPlugin from './plugins/EmojiPickerPlugin';
 import EmojisPlugin from './plugins/EmojisPlugin';
 import EquationsPlugin from './plugins/EquationsPlugin';
 import ExcalidrawPlugin from './plugins/ExcalidrawPlugin';
+import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
 import FigmaPlugin from './plugins/FigmaPlugin';
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin';
 import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
@@ -76,7 +79,7 @@ const skipCollaborationInit =
   // @ts-expect-error
   window.parent != null && window.parent.frames.right === window;
 
-export default function Editor(): JSX.Element {
+export default function Editor({ onChange }): JSX.Element {
   const {historyState} = useSharedHistoryContext();
   const {
     settings: {
@@ -94,6 +97,18 @@ export default function Editor(): JSX.Element {
     },
   } = useSettings();
   const isEditable = useLexicalEditable();
+  const [editor] = useLexicalComposerContext();
+  useEffect(() => {
+    return editor.registerUpdateListener(({editorState}) => {
+      
+      editor.update(() => {
+        const html = $generateHtmlFromNodes(editor, null);
+        // use `onChange` from props
+        console.log(html);
+        onChange(html);
+      })
+    });
+  }, [editor, onChange]);
   const text = isCollab
     ? 'Enter some collaborative rich text...'
     : isRichText
@@ -106,6 +121,13 @@ export default function Editor(): JSX.Element {
     useState<boolean>(false);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
 
+  function onchange(editorState) {
+    editorState.read(() => {
+      // Read the contents of the EditorState here.
+      const selection = $getSelection();
+  
+    });
+  }
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
       setFloatingAnchorElem(_floatingAnchorElem);
@@ -131,6 +153,8 @@ export default function Editor(): JSX.Element {
 
   return (
     <>
+    
+      <OnChangePlugin onChange={onchange} />
       {isRichText && <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />}
       <div
         className={`editor-container ${showTreeView ? 'tree-view' : ''} ${
@@ -143,7 +167,6 @@ export default function Editor(): JSX.Element {
         <ComponentPickerPlugin />
         <EmojiPickerPlugin />
         <AutoEmbedPlugin />
-
         <MentionsPlugin />
         <EmojisPlugin />
         <HashtagPlugin />
