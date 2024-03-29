@@ -1,3 +1,4 @@
+import "./index.css"
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { configureStore } from '@reduxjs/toolkit'
@@ -9,7 +10,6 @@ import axios from 'axios';
 import App from './components/App';
 import config from './config';
 import reducers from './reducers';
-
 axios.defaults.baseURL = config.baseURLApi;
 axios.defaults.headers.common['Content-Type'] = "application/json";
 const token = localStorage.getItem('token');

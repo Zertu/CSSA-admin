@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   Breadcrumb,
   BreadcrumbItem,
+  Button,
 } from 'reactstrap';
 
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
@@ -20,7 +21,9 @@ const router = useNavigate();
   const formatDate = (str) => {
     return str.replace(/,.*$/,"");
   }
-
+  const addNew = () => {
+    console.log('new');
+}
   const toggleDropdown = () => {
     setIsDropdownOpened(prevState => !prevState);
   }
@@ -42,12 +45,26 @@ const router = useNavigate();
       <Breadcrumb>
         <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
         <BreadcrumbItem active>Articles</BreadcrumbItem>
+        
       </Breadcrumb>
       
-      <div className="bg-white relative editor">
+      <div className="bg-white relative editor_container">
       <LexicalComposer initialConfig={initialConfig}>
       <Editor></Editor>
       </LexicalComposer>
+      </div>
+      
+      <div className="flex justify-end">
+      <Button onClick={addNew} size="sm" color="warning" className="mr-sm mb-xs">
+               Save
+              </Button>
+          <Button onClick={addNew} size="sm" color="success" className="mr-sm mb-xs">
+               Publish
+              </Button>
+          <Button onClick={addNew} size="sm" color="info" className="mr-sm mb-xs">
+               Cancel
+              </Button>
+              
       </div>
     </div>
   );
