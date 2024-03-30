@@ -11,7 +11,7 @@ import { mock } from './mock'
 
 import s from './PostList.module.scss';
 import Widget from '../../../components/Widget/Widget';
-import { fetchPosts } from '../../../actions/posts';
+// import { fetchPosts } from '../../../actions/articles';
 
 class PostList extends React.Component {
   static propTypes = {
@@ -32,7 +32,7 @@ class PostList extends React.Component {
 
   componentDidMount() {
     if(process.env.NODE_ENV === "development") {
-      this.props.dispatch(fetchPosts());      
+      // this.props.dispatch(fetchPosts());      
     }
   }
 

@@ -1,50 +1,50 @@
 import {
-  CREATE_POST_INITIAL,
-  CREATE_POST_REQUEST,
-  CREATE_POST_SUCCESS,
-  CREATE_POST_FAILURE,
-  FETCH_POSTS_REQUEST,
-  FETCH_POSTS_SUCCESS,
-  FETCH_POSTS_FAILURE,
-} from '../actions/posts';
+  CREATE_ARTICLE_INITIAL,
+  CREATE_ARTICLE_REQUEST,
+  CREATE_ARTICLE_SUCCESS,
+  CREATE_ARTICLE_FAILURE,
+  FETCH_ARTICLES_REQUEST,
+  FETCH_ARTICLES_SUCCESS,
+  FETCH_ARTICLES_FAILURE,
+} from '../actions/articles';
 
-export default function posts(
+export default function articles(
   state = {
     isFetching: false,
   },
   action,
 ) {
   switch (action.type) {
-    case CREATE_POST_INITIAL:
+    case CREATE_ARTICLE_INITIAL:
       return Object.assign({}, state, {
         isFetching: false,
         message: null,
       });
-    case CREATE_POST_REQUEST:
+    case CREATE_ARTICLE_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
       });
-    case CREATE_POST_SUCCESS:
+    case CREATE_ARTICLE_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        message: 'Post created successfully',
+        message: 'Article created successfully',
       });
-    case CREATE_POST_FAILURE:
+    case CREATE_ARTICLE_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         message:
-          'Due to security reasons posts creation is closed in demo version. Please setup locally to test',
+          'Due to security reasons articles creation is closed in demo version. Please setup locally to test',
       });
-    case FETCH_POSTS_REQUEST:
+    case FETCH_ARTICLES_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
       });
-    case FETCH_POSTS_SUCCESS:
+    case FETCH_ARTICLES_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        posts: action.posts,
+        articles: action.articles,
       });
-    case FETCH_POSTS_FAILURE:
+    case FETCH_ARTICLES_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         message: 'Something wrong happened. Please come back later',

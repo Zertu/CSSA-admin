@@ -24,7 +24,7 @@ import { mock } from './mock'
 
 import Widget from '../../components/Widget/Widget';
 
-import { fetchPosts } from '../../actions/posts';
+// import { fetchPosts } from '../../actions/articles';
 import s from './Dashboard.module.scss';
 
 class Dashboard extends Component {
@@ -47,7 +47,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     if(process.env.NODE_ENV === "development") {
-      this.props.dispatch(fetchPosts());      
+      // this.props.dispatch(fetchPosts());      
     }
   }
 

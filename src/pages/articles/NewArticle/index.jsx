@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,33 +21,31 @@ import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
 
-function Dashboard({ isFetching, posts }) {
+function NewArticle() {
+  const isFetching = useSelector((state) => state.articles.isFetching);
+  // const posts = useSelector(state => state.articles.posts);
   const navigate = useNavigate(); // 使用 useNavigate 钩子函数
-  const [html, setHtml] = useState("");
-  const { register, handleSubmit, formState: { errors }, control } = useForm({
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
     defaultValues: {
       title: "",
-      content: ""
-    }
-  }); // 初始化 useForm
-  const formatDate = (str) => {
-    return str.replace(/,.*$/, "");
-  };
+      content: "",
+    },
+  });
 
   const onCancel = () => {
     navigate("/app/articles"); // 返回上一页
-  };
-  const onChange = (state) => {
-    console.log(setHtml(state));
   };
 
   const onPublish = (data) => {
     console.log("Publish:", data);
   };
-  
-  const onSubmit = (state) => {
-    handleSubmit()
-    console.log(setHtml(state));
+
+  const onSubmit = (data) => {
+    console.log("Publish:", data);
   };
   const {
     settings: { isCollab, emptyEditor, measureTypingPerf },
@@ -89,7 +86,7 @@ function Dashboard({ isFetching, posts }) {
                   <Input
                     id="title"
                     name="title"
-                    invalid ={errors.title}
+                    invalid={errors.title}
                     placeholder="Enter Title"
                     type="text"
                     {...field}
@@ -97,7 +94,9 @@ function Dashboard({ isFetching, posts }) {
                 )}
               />
               {errors.title && (
-                <FormFeedback className="" tooltip>{errors.title.message}</FormFeedback>
+                <FormFeedback className="" tooltip>
+                  {errors.title.message}
+                </FormFeedback>
               )}
             </Col>
           </FormGroup>
@@ -112,14 +111,7 @@ function Dashboard({ isFetching, posts }) {
                   control={control}
                   defaultValue=""
                   rules={{ required: true }}
-                  render={({ field }) => (
-                    <Editor
-                      onChange={(state) => {
-                        setHtml(state);
-                        field.onChange(state);
-                      }}
-                    />
-                  )}
+                  render={({ field }) => <Editor name="content" {...field} />}
                 />
               </LexicalComposer>
               {errors.content && (
@@ -133,6 +125,7 @@ function Dashboard({ isFetching, posts }) {
               type="submit" // 设置按钮类型为 submit
               size="sm"
               color="warning"
+              disabled={isFetching}
               className="mr-sm mb-xs"
               onClick={handleSubmit(onSubmit)}
             >
@@ -142,8 +135,9 @@ function Dashboard({ isFetching, posts }) {
               type="submit" // 设置按钮类型为 submit
               size="sm"
               color="success"
+              disabled={isFetching}
               className="mr-sm mb-xs"
-              onClick={handleSubmit(onPublish)} 
+              onClick={handleSubmit(onPublish)}
             >
               Publish
             </Button>
@@ -151,6 +145,7 @@ function Dashboard({ isFetching, posts }) {
               onClick={onCancel}
               size="sm"
               color="info"
+              disabled={isFetching}
               className="mr-sm mb-xs"
             >
               Cancel
@@ -162,11 +157,4 @@ function Dashboard({ isFetching, posts }) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    isFetching: state.posts.isFetching,
-    posts: state.posts.posts,
-  };
-}
-
-export default connect(mapStateToProps)(Dashboard);
+export default NewArticle;

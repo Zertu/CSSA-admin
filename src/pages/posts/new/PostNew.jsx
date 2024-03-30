@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 
 import Widget from '../../../components/Widget/Widget';
 
-import { createPost } from '../../../actions/posts';
+// import { createPost } from '../../../actions/articles';
 import s from './PostNew.module.scss';
 
 class PostNew extends React.Component {
@@ -57,10 +57,10 @@ class PostNew extends React.Component {
   doCreatePost = (e) => {
     this.props
       .dispatch(
-        createPost({
-          title: this.state.title,
-          content: this.state.content,
-        }),
+        // createPost({
+        //   title: this.state.title,
+        //   content: this.state.content,
+        // }),
       )
       .then(() =>
         this.setState({
