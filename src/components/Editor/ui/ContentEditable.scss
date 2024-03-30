@@ -13,7 +13,9 @@
   position: relative;
   outline: 0;
   padding: 8px 28px 40px;
-  min-height: calc(100vh - 650px);
+  min-height: calc(100vh - 420px);
+  max-height: calc(100vh - 420px);
+  overflow-y: scroll;
 }
 @media (max-width: 1025px) {
   .ContentEditable__root {
