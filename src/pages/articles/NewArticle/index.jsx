@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,15 +14,18 @@ import { useForm, Controller } from "react-hook-form";
 
 import Widget from "@/components/Widget/Widget";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import Editor from "@/components/Editor/Editor";
 
 import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
+import { createArticle, updateArticle } from "../../../actions/articles";
 
 function NewArticle() {
+  let { id } = useParams();
   const isFetching = useSelector((state) => state.articles.isFetching);
+  const dispatch = useDispatch()
   // const posts = useSelector(state => state.articles.posts);
   const navigate = useNavigate(); // 使用 useNavigate 钩子函数
   const {
@@ -45,10 +48,25 @@ function NewArticle() {
   };
 
   const onSubmit = (data) => {
-    console.log("Publish:", data);
+    const baseData={
+      title:data.title,
+      content:data.content,
+      draft:true,
+      tags:[],
+      summary:'',
+      images:[]
+    };
+    if(id){
+      updateArticle({
+        id,
+        ...baseData,
+      })
+    }else{
+      dispatch(createArticle(baseData));
+    }
   };
   const {
-    settings: { isCollab, emptyEditor, measureTypingPerf },
+    settings: { emptyEditor, },
   } = useSettings();
   const initialConfig = {
     editorState: emptyEditor,

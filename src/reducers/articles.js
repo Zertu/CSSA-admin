@@ -11,6 +11,7 @@ import {
 export default function articles(
   state = {
     isFetching: false,
+    articles: [],
   },
   action,
 ) {

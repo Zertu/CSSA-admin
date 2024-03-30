@@ -1,10 +1,12 @@
-export const CREATE_ARTICLE_INITIAL = 'CREATE_ARTICLE_INITIAL';
-export const CREATE_ARTICLE_REQUEST = 'CREATE_ARTICLE_REQUEST';
-export const CREATE_ARTICLE_SUCCESS = 'CREATE_ARTICLE_SUCCESS';
-export const CREATE_ARTICLE_FAILURE = 'CREATE_ARTICLE_FAILURE';
-export const FETCH_ARTICLES_REQUEST = 'FETCH_ARTICLES_REQUEST';
-export const FETCH_ARTICLES_SUCCESS = 'FETCH_ARTICLES_SUCCESS';
-export const FETCH_ARTICLES_FAILURE = 'FETCH_ARTICLES_FAILURE';
+import { get, post, put } from ".";
+
+export const CREATE_ARTICLE_INITIAL = "CREATE_ARTICLE_INITIAL";
+export const CREATE_ARTICLE_REQUEST = "CREATE_ARTICLE_REQUEST";
+export const CREATE_ARTICLE_SUCCESS = "CREATE_ARTICLE_SUCCESS";
+export const CREATE_ARTICLE_FAILURE = "CREATE_ARTICLE_FAILURE";
+export const FETCH_ARTICLES_REQUEST = "FETCH_ARTICLES_REQUEST";
+export const FETCH_ARTICLES_SUCCESS = "FETCH_ARTICLES_SUCCESS";
+export const FETCH_ARTICLES_FAILURE = "FETCH_ARTICLES_FAILURE";
 
 function createArticleInitial() {
   return {
@@ -59,34 +61,18 @@ function fetchArticlesError(message) {
     message,
   };
 }
-
+export function updateArticle(data) {
+  put(`articles${data.id}`, data);
+}
 export function createArticle(articleData) {
-  const config = {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `mutation {
-                addArticle(title: "${articleData.title}", content: "${
-        articleData.content
-      }"){
-                  id,
-                  title,
-                  content
-                }
-              }`,
-    }),
-    credentials: 'include',
-  };
-
-  return dispatch => {
+  console.log(articleData);
+  return (dispatch) => {
     // We dispatch requestCreateArticle to kickoff the call to the API
     dispatch(requestCreateArticle(articleData));
-    if(process.env.NODE_ENV === "development") {
-    return fetch('/graphql', config)
-      .then(response => response.json().then(article => ({ article, response })))
+    return post("articles", articleData)
+      .then((response) =>
+        response.json().then((article) => ({ article, response }))
+      )
       .then(({ article, response }) => {
         if (!response.ok) {
           // If there was a problem, we want to
@@ -101,48 +87,22 @@ export function createArticle(articleData) {
         }, 5000);
         return Promise.resolve(article);
       })
-      .catch(err => console.error('Error: ', err));
-    } else {
-      dispatch(createArticleError(''));
-      return Promise.reject();
-    }
+      .catch((err) => console.error("Error: ", err));
   };
 }
 
 export function fetchArticles() {
-  const config = {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: '{articles{id,title,content,updatedAt}}',
-    }),
-    credentials: 'include',
-  };
-
-  return dispatch => {
+  return async (dispatch) => {
     dispatch(requestFetchArticles());
-
-    return fetch('/graphql', config)
-      .then(response =>
-        response.json().then(responseJson => ({
-          articles: responseJson.data.articles,
-          responseJson,
-        })),
-      )
-      .then(({ articles, responseJson }) => {
-        if (!responseJson.data.articles) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(fetchArticlesError(articles.message));
-          return Promise.reject(articles);
-        }
-        // Dispatch the success action
-        dispatch(fetchArticlesSuccess(articles));
-        return Promise.resolve(articles);
-      })
-      .catch(err => console.error('Error: ', err));
+    const articles = await get("articles");
+    if (!articles) {
+      // If there was a problem, we want to
+      // dispatch the error condition
+      dispatch(fetchArticlesError(articles.message));
+      return Promise.reject(articles);
+    }
+    // Dispatch the success action
+    dispatch(fetchArticlesSuccess(articles));
+    return Promise.resolve(articles);
   };
 }
