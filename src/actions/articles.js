@@ -66,28 +66,23 @@ export function updateArticle(data) {
 }
 export function createArticle(articleData) {
   console.log(articleData);
-  return (dispatch) => {
+  return async(dispatch) => {
     // We dispatch requestCreateArticle to kickoff the call to the API
     dispatch(requestCreateArticle(articleData));
-    return post("articles", articleData)
-      .then((response) =>
-        response.json().then((article) => ({ article, response }))
-      )
-      .then(({ article, response }) => {
-        if (!response.ok) {
+    const response = await post("articles", articleData)
+      
+        if (!response) {
           // If there was a problem, we want to
           // dispatch the error condition
-          dispatch(createArticleError(article.message));
-          return Promise.reject(article);
+          dispatch(createArticleError(response.title));
+          return Promise.reject('article failed to create');
         }
         // Dispatch the success action
-        dispatch(createArticleSuccess(article));
+        dispatch(createArticleSuccess('article created successfully'));
         setTimeout(() => {
           dispatch(createArticleInitial());
         }, 5000);
-        return Promise.resolve(article);
-      })
-      .catch((err) => console.error("Error: ", err));
+        return Promise.resolve('article created successfully');
   };
 }
 
