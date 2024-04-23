@@ -11,7 +11,6 @@ import {
   FormFeedback,
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
-
 import Widget from "@/components/Widget/Widget";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useNavigate,useParams } from "react-router-dom";
@@ -20,7 +19,8 @@ import Editor from "@/components/Editor/Editor";
 import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
-import { createArticle, updateArticle } from "../../../actions/articles";
+import { createArticle, fetchArticles, updateArticle } from "../../../actions/articles";
+import { useEffect,useRef } from "react";
 
 function NewArticle() {
   let { id } = useParams();
@@ -29,6 +29,7 @@ function NewArticle() {
   // const posts = useSelector(state => state.articles.posts);
   const navigate = useNavigate(); // 使用 useNavigate 钩子函数
   const {
+    setValue,
     handleSubmit,
     formState: { errors },
     control,
@@ -38,7 +39,16 @@ function NewArticle() {
       content: "",
     },
   });
-
+  
+  async function fetchData() {
+    if (id) {
+      const res =await dispatch(fetchArticles(id));
+      setValue("title", res.title);
+      setValue("content", res.content);
+      
+    }
+  }
+  useEffect(() => {fetchData()}, []);
   const onCancel = () => {
     navigate("/app/articles"); // 返回上一页
   };
@@ -68,6 +78,7 @@ function NewArticle() {
   const {
     settings: { emptyEditor, },
   } = useSettings();
+  const editorRef= useRef();
   const initialConfig = {
     editorState: emptyEditor,
     namespace: "Playground",
@@ -77,6 +88,13 @@ function NewArticle() {
     },
     theme: PlaygroundEditorTheme,
   };
+  if (editorRef.current !== undefined) {
+    if (editorRef.current !== null) {
+      const latestEditorState = editorRef.current.refreshEditor();
+   
+      console.log(editorRef.current);
+    }
+  }
   return (
     <div>
       <Breadcrumb>
@@ -129,7 +147,7 @@ function NewArticle() {
                   control={control}
                   defaultValue=""
                   rules={{ required: true }}
-                  render={({ field }) => <Editor name="content" {...field} />}
+                  render={({ field }) => <Editor ref={editorRef} name="content" {...field} />}
                 />
               </LexicalComposer>
               {errors.content && (

@@ -22,11 +22,16 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import useLexicalEditable from "@lexical/react/useLexicalEditable";
+import LexicalEditorRefPlugin from "@lexical/react/LexicalEditorRefPlugin";
+
 import * as React from "react";
+import {
+  $getSelection,
+  $getRoot,
+} from 'lexical';
 import { useEffect, useState } from "react";
 import { CAN_USE_DOM } from "./shared/canUseDOM";
-import { $generateHtmlFromNodes,$generateNodesFromDOM } from "@lexical/html";
-
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { createWebsocketProvider } from "./collaboration";
 import { useSettings } from "./context/SettingsContext";
 import { useSharedHistoryContext } from "./context/SharedHistoryContext";
@@ -66,7 +71,6 @@ import TableCellActionMenuPlugin from "./plugins/TableActionMenuPlugin";
 import TableCellResizer from "./plugins/TableCellResizer";
 import TableOfContentsPlugin from "./plugins/TableOfContentsPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
-import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import TwitterPlugin from "./plugins/TwitterPlugin";
 import YouTubePlugin from "./plugins/YouTubePlugin";
 import ContentEditable from "./ui/ContentEditable";
@@ -77,7 +81,7 @@ const skipCollaborationInit =
   // @ts-expect-error
   window.parent != null && window.parent.frames.right === window;
 
-const Editor=React.forwardRef(({ onChange, onBlur, value }, inputRef)=> {
+const Editor = React.forwardRef(({ onChange, onBlur, value }, inputRef) => {
   const { historyState } = useSharedHistoryContext();
   const {
     settings: {
@@ -104,19 +108,25 @@ const Editor=React.forwardRef(({ onChange, onBlur, value }, inputRef)=> {
       });
     });
   }, [editor, onChange]);
-  // useEffect(() => {
-  //   return editor.registerUpdateListener(({ editorState }) => {
-  //     editor.update(() => {
-  //       const nodes = $generateNodesFromDOM(editor, new DOMParser().parseFromString(value, "text/xml"));
-  //       console.log(nodes)
-  //     });
-  //   });
-  // }, [value]);
+  const refreshEditor = () => {
+    editor.update(() => {
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(value, "text/html");
+      const nodes = $generateNodesFromDOM(editor, dom);
+      // Select the root
+      $getRoot().select();
+      // Insert them at a selection.
+      const selection = $getSelection();
+      if (selection) {
+        selection.insertNodes(nodes);
+      }
+    });
+  }
   const text = isCollab
     ? "Enter some collaborative rich text..."
     : isRichText
-    ? "Enter some rich text..."
-    : "Enter some plain text...";
+      ? "Enter some rich text..."
+      : "Enter some plain text...";
   const placeholder = <Placeholder>{text}</Placeholder>;
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -151,9 +161,8 @@ const Editor=React.forwardRef(({ onChange, onBlur, value }, inputRef)=> {
     <>
       {isRichText && <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />}
       <div
-        className={`editor-container ${showTreeView ? "tree-view" : ""} ${
-          !isRichText ? "plain-text" : ""
-        }`}
+        className={`editor-container ${showTreeView ? "tree-view" : ""} ${!isRichText ? "plain-text" : ""
+          }`}
       >
         {isMaxLength && <MaxLengthPlugin maxLength={30} />}
         <DragDropPaste />

@@ -7,7 +7,7 @@ import {
   PaginationLink,
 } from "reactstrap";
 
-function CustomTable({ data, itemsPerPage=10, headers: userHeaders }) {
+function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [headers, setHeaders] = useState([]);
 
@@ -37,8 +37,8 @@ function CustomTable({ data, itemsPerPage=10, headers: userHeaders }) {
 
   function getPageData() {
     const offset = currentPage * itemsPerPage;
-    const pageData = data.slice(offset, offset + itemsPerPage);
-    return pageData;
+    const pageData = data?.slice(offset, offset + itemsPerPage);
+    return pageData || [];
   }
 
   return (
@@ -57,7 +57,7 @@ function CustomTable({ data, itemsPerPage=10, headers: userHeaders }) {
           {getPageData().map((row, rowIndex) => (
             <tr key={rowIndex}>
               {headers.map(({ key, render }, cellIndex) => (
-                <td key={key}>{render(row[key],row)}</td>
+                <td key={key}>{render(row[key], row)}</td>
               ))}
             </tr>
           ))}

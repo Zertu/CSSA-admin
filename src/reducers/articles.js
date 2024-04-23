@@ -41,10 +41,16 @@ export default function articles(
         isFetching: true,
       });
     case FETCH_ARTICLES_SUCCESS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        articles: action.articles,
-      });
+      if(action.articles.length){
+        return Object.assign({}, state, {
+          isFetching: false,
+          articles: action.articles,
+        });
+      }else{
+        return Object.assign({}, state, {
+          isFetching: false,
+        });
+      }
     case FETCH_ARTICLES_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,

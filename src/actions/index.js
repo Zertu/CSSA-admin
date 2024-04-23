@@ -20,7 +20,6 @@ export async function deleteReq(url, params = null) {
 
 async function sendRequest(method, url, data = null, params = null) {
   try {
-    console.log(baseURL + url)
     const response = await axios({
       method: method,
       url: baseURL + url,

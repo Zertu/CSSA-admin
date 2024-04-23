@@ -65,31 +65,30 @@ export function updateArticle(data) {
   put(`articles${data.id}`, data);
 }
 export function createArticle(articleData) {
-  console.log(articleData);
-  return async(dispatch) => {
+  return async (dispatch) => {
     // We dispatch requestCreateArticle to kickoff the call to the API
     dispatch(requestCreateArticle(articleData));
-    const response = await post("articles", articleData)
-      
-        if (!response) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(createArticleError(response.title));
-          return Promise.reject('article failed to create');
-        }
-        // Dispatch the success action
-        dispatch(createArticleSuccess('article created successfully'));
-        setTimeout(() => {
-          dispatch(createArticleInitial());
-        }, 5000);
-        return Promise.resolve('article created successfully');
+    const response = await post("articles", articleData);
+
+    if (!response) {
+      // If there was a problem, we want to
+      // dispatch the error condition
+      dispatch(createArticleError(response.title));
+      return Promise.reject("article failed to create");
+    }
+    // Dispatch the success action
+    dispatch(createArticleSuccess("article created successfully"));
+    setTimeout(() => {
+      dispatch(createArticleInitial());
+    }, 5000);
+    return Promise.resolve("article created successfully");
   };
 }
 
-export function fetchArticles() {
+export function fetchArticles(id = "") {
   return async (dispatch) => {
     dispatch(requestFetchArticles());
-    const articles = await get("articles");
+    const articles = await get(`${id ? `articles/${id}` : "articles"}`);
     if (!articles) {
       // If there was a problem, we want to
       // dispatch the error condition

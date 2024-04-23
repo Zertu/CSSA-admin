@@ -11,9 +11,9 @@ import Sidebar from "components/Sidebar/Sidebar";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import Buttons from "@/pages/buttons/Buttons";
 import Charts from "@/pages/charts/Charts";
-import Articles from '@/pages/articles/Articles'
+import Articles from "@/pages/articles/Articles";
 
-import NewArticle from '@/pages/articles/NewArticle'
+import NewArticle from "@/pages/articles/NewArticle";
 import NotFound from "@/pages/notFound/NotFound";
 import Icons from "@/pages/icons/Icons";
 import Typography from "@/pages/typography/Typography";
@@ -50,12 +50,11 @@ class Layout extends React.Component {
             <Routes>
               <Route index path="/main" element={<Dashboard />} />
               <Route path="/typography" element={<Typography />} />
-              <Route path="/articles" element={<Articles />} >
-              </Route>
-              
               <Route path="/articles/new" element={<NewArticle />} />
+              <Route path="/articles/:id" element={<NewArticle />} />
+              <Route path="/articles" element={<Articles />} />
               <Route path="/tables" element={<Tables />} />
-              <Route path="/posts" element={<Posts />} ></Route>
+              <Route path="/posts" element={<Posts />}></Route>
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/notifications" element={<Notifications />} />
