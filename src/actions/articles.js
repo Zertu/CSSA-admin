@@ -62,7 +62,7 @@ function fetchArticlesError(message) {
   };
 }
 export function updateArticle(data) {
-  put(`articles${data.id}`, data);
+  put(`articles/${data.id}`, data);
 }
 export function createArticle(articleData) {
   return async (dispatch) => {

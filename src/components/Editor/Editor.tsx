@@ -81,7 +81,7 @@ const skipCollaborationInit =
   // @ts-expect-error
   window.parent != null && window.parent.frames.right === window;
 
-const Editor = React.forwardRef(({ onChange, onBlur, value }, inputRef) => {
+const Editor = React.forwardRef(({ onChange, onBlur, value }: { onChange: Function, onBlur: Function, value: any }, inputRef) => {
   const { historyState } = useSharedHistoryContext();
   const {
     settings: {
@@ -100,6 +100,25 @@ const Editor = React.forwardRef(({ onChange, onBlur, value }, inputRef) => {
   } = useSettings();
   const isEditable = useLexicalEditable();
   const [editor] = useLexicalComposerContext();
+  React.useImperativeHandle(inputRef, () => ({
+    refreshEditor: () => {
+      editor.update(() => {
+        const parser = new DOMParser();
+        const dom = parser.parseFromString(value, "text/html");
+        const nodes = $generateNodesFromDOM(editor, dom);
+        // Select the root
+        
+        $getRoot().select();
+        // Insert them at a selection.
+        const selection = $getSelection();
+        console.log(selection)
+        if (selection) {
+        $getRoot().clear();
+          selection.insertNodes(nodes);
+        }
+      });
+    },
+  }));
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {
       editor.update(() => {

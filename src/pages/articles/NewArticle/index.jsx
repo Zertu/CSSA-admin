@@ -45,7 +45,9 @@ function NewArticle() {
       const res =await dispatch(fetchArticles(id));
       setValue("title", res.title);
       setValue("content", res.content);
-      
+      setTimeout(() => {
+        editorRef?.current?.refreshEditor()
+      }, 100);
     }
   }
   useEffect(() => {fetchData()}, []);
@@ -57,7 +59,7 @@ function NewArticle() {
     console.log("Publish:", data);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit =async (data) => {
     const baseData={
       title:data.title,
       content:data.content,
@@ -67,13 +69,14 @@ function NewArticle() {
       images:[]
     };
     if(id){
-      updateArticle({
+    await  updateArticle({
         id,
         ...baseData,
       })
     }else{
-      dispatch(createArticle(baseData));
+      await dispatch(createArticle(baseData));
     }
+    onCancel()
   };
   const {
     settings: { emptyEditor, },
@@ -88,13 +91,6 @@ function NewArticle() {
     },
     theme: PlaygroundEditorTheme,
   };
-  if (editorRef.current !== undefined) {
-    if (editorRef.current !== null) {
-      const latestEditorState = editorRef.current.refreshEditor();
-   
-      console.log(editorRef.current);
-    }
-  }
   return (
     <div>
       <Breadcrumb>
@@ -145,9 +141,8 @@ function NewArticle() {
                 <Controller
                   name="content"
                   control={control}
-                  defaultValue=""
                   rules={{ required: true }}
-                  render={({ field }) => <Editor ref={editorRef} name="content" {...field} />}
+                  render={({ field }) => <Editor {...field} ref={editorRef} name="content" />}
                 />
               </LexicalComposer>
               {errors.content && (
