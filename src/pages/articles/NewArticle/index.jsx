@@ -21,6 +21,7 @@ import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
 import { createArticle, fetchArticles, updateArticle } from "../../../actions/articles";
 import { useEffect,useRef } from "react";
+import TagSelect from "../../../components/TagSelect";
 
 function NewArticle() {
   let { id } = useParams();
@@ -100,10 +101,10 @@ function NewArticle() {
       <Widget>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup row>
-            <Label for="title" sm={1}>
+            <Label for="title" sm={2}>
               Article Title
             </Label>
-            <Col sm={11} className="relative">
+            <Col sm={4} className="relative">
               <Controller
                 name="title"
                 control={control}
@@ -131,9 +132,40 @@ function NewArticle() {
                 </FormFeedback>
               )}
             </Col>
+            <Label for="title" sm={2}>
+              Article Tag
+            </Label>
+            <Col sm={4} className="relative">
+              <Controller
+                name="tag"
+                control={control}
+                rules={{
+                  required: "This field is required",
+                  minLength: {
+                    value: 5,
+                    message: "Title must be at least 5 characters",
+                  },
+                }}
+                render={({ field }) => (
+                  <TagSelect
+                    id="tag"
+                    name="tag"
+                    options={[{ value:'123',text:'123'},{ value:'1234',text:'1234'}]}
+                    invalid={errors.tag}
+                    placeholder="Enter Title"
+                    {...field}
+                  />
+                )}
+              />
+              {errors.title && (
+                <FormFeedback className="" tooltip>
+                  {errors.title.message}
+                </FormFeedback>
+              )}
+            </Col>
           </FormGroup>
           <FormGroup>
-            <Label for="content" sm={1}>
+            <Label for="content" sm={2}>
               Article Contents
             </Label>
             <Col className="bg-white relative editor_container">
