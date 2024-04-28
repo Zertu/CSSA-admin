@@ -1,6 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import { RouterProvider, Navigate, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import ErrorPage from "../pages/error/ErrorPage";
@@ -25,48 +24,50 @@ const CloseButton = ({ closeToast }) => (
   <i onClick={closeToast} className="la la-close notifications-close" />
 );
 
-class App extends React.PureComponent {
-  render() {
-    return (
-      <div>
-        <ToastContainer
-          autoClose={5000}
-          hideProgressBar
-          closeButton={<CloseButton />}
-        />
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/app" replace />} />
-            <Route
-             path="/app/*"
-              element={
-                <PrivateRoute dispatch={this.props.dispatch}>
-                    <LayoutComponent />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/documentation"
-              element={
-                <Navigate
-                  to="/documentation/getting-started/overview"
-                  replace
-                />
-              }
-            />
-            {/* <Route path="/documentation" element={<DocumentationLayoutComponent />} /> */}
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/error" element={<ErrorPage />} />
-          </Routes>
-        </HashRouter>
-      </div>
-    );
-  }
-}
+const App = () => {
+  const routes = [
+    {
+      path: "/",
+      element: <Navigate to="/app" replace />,
+    },
+    {
+      path: "/app/*",
+      element: (
+        <PrivateRoute>
+          <LayoutComponent />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/documentation",
+      element: (
+        <Navigate to="/documentation/getting-started/overview" replace />
+      ),
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/error",
+      element: <ErrorPage />,
+    },
+  ];
+  const router = createBrowserRouter(routes)
+  return (
+    <div>
+      <ToastContainer
+        autoClose={5000}
+        hideProgressBar
+        closeButton={<CloseButton />}
+      />
+      <RouterProvider router={router} />
+    </div>
+  );
+};
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

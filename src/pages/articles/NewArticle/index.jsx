@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
   Button,
   Col,
   FormGroup,
@@ -16,12 +14,13 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useNavigate,useParams } from "react-router-dom";
 import Editor from "@/components/Editor/Editor";
 
+import Breadcrumb from "@/components/Breadcrumb";
 import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
 import { createArticle, fetchArticles, updateArticle } from "../../../actions/articles";
 import { useEffect,useRef } from "react";
-import TagSelect from "../../../components/TagSelect";
+import TagSelect from "@/components/TagSelect";
 
 function NewArticle() {
   let { id } = useParams();
@@ -94,10 +93,7 @@ function NewArticle() {
   };
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-        <BreadcrumbItem active>Articles</BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb />
       <Widget>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup row>

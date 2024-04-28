@@ -15,7 +15,7 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
   React.useEffect(() => {
     setMatch(location?.pathname === headerLink);
   }, [location, headerLink]);
-  if (!childrenLinks) {
+  if (!childrenLinks||childrenLinks.filter((i) => i.index).length === 1){
     return (
       <li className={cx(s.headerLink, className)}>
         <NavLink
@@ -50,19 +50,21 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
       <Collapse className={s.panel} isOpen={isOpen}>
         <ul>
           {childrenLinks &&
-            childrenLinks.map((child) => (
-              <li key={child.name}>
-                <NavLink
-                  to={child.link}
-                  onClick={() => setIsOpen(true)}
-                  className={({ isActive }) =>
-                    isActive ? s.headerLinkActive : ""
-                  }
-                >
-                  {child.name}
-                </NavLink>
-              </li>
-            ))}
+            childrenLinks
+              .filter((i) => i.show)
+              .map((child) => (
+                <li key={child.title}>
+                  <NavLink
+                    to={child.headerLink}
+                    onClick={() => setIsOpen(true)}
+                    className={({ isActive }) =>
+                      isActive ? s.headerLinkActive : ""
+                    }
+                  >
+                    {child.title}
+                  </NavLink>
+                </li>
+              ))}
         </ul>
       </Collapse>
     </li>

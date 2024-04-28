@@ -1,4 +1,3 @@
-import React from 'react';
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -6,56 +5,7 @@ import Icon from '../Icon/Icon';
 import LinksGroup from './LinksGroup/LinksGroup';
 
 import s from './Sidebar.module.scss';
-const links = [
-  {
-    header: "Dashboard",
-    headerLink: "/app/main",
-    glyph: "dashboard"
-  },
-  {
-    header: "Articles",
-    headerLink: "/app/articles",
-    glyph: "typography",
-  },
-  {
-    header: "Typography",
-    headerLink: "/app/typography",
-    glyph: "typography"
-  },
-  {
-    header: "Tables Basic",
-    headerLink: "/app/tables",
-    glyph: "tables"
-  },
-  {
-    header: "Notifications",
-    headerLink: "/app/notifications",
-    glyph: "notifications"
-  },
-  {
-    header: "Components",
-    headerLink: "/app/components",
-    glyph: "components",
-    childrenLinks: [
-      {
-        name: 'Buttons',
-        link: '/app/components/buttons',
-      },
-      {
-        name: 'Charts',
-        link: '/app/components/charts',
-      },
-      {
-        name: 'Icons',
-        link: '/app/components/icons',
-      },
-      {
-        name: 'Maps',
-        link: '/app/components/maps',
-      },
-    ]
-  }
-];
+import links from '@/router';
 
 const Sidebar = () => (
 <nav className={s.root}>
@@ -65,15 +15,17 @@ const Sidebar = () => (
     </Link>
   </header>
   <ul className={s.nav}>
-    {links.map(link => (
-      <LinksGroup
-        key={link.header}
-        header={link.header}
-        headerLink={link.headerLink}
-        glyph={link.glyph}
-        childrenLinks={link.childrenLinks}
-      />
-    ))}
+    {links.map(link => {
+      return (
+        <LinksGroup
+          key={link.title}
+          header={link?.title}
+          headerLink={link.headerLink}
+          glyph={link.glyph}
+          childrenLinks={link.children}
+        />
+      )
+    })}
   </ul>
 </nav>
 );

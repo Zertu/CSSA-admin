@@ -311,11 +311,5 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    isFetching: state.posts.isFetching,
-    posts: state.posts.posts,
-  };
-}
 
-export default connect(mapStateToProps)(Dashboard);
+export default (Dashboard);

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Row,
   Col,
-  Breadcrumb,
-  BreadcrumbItem,
   Button,
 } from "reactstrap";
+import Breadcrumb from "@/components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { fetchArticles } from "../../actions/articles";
 import AdvancedTable from "@/components/Table";
@@ -33,28 +32,21 @@ function Articles() {
     { key: "operation", alias: "操作", width: "10%", render: (value,row) => {
       return (
         <div>
-          <Link to={`/app/articles/${row.id}`} className="mr-1">编辑</Link>
-          <Link onClick={()=>handleDelete(row)} className="btn-sm">删除</Link>
+          <NavLink to={`/app/articles/edit/${row.id}`} className="mr-1">编辑</NavLink>
+          <NavLink onClick={()=>handleDelete(row)} className="btn-sm">删除</NavLink>
         </div>
       )
     
     } }
   ];
   
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const addNew = () => {
     router("new");
-  };
-  const toggleDropdown = () => {
-    setIsDropdownOpened((prevState) => !prevState);
   };
 
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-        <BreadcrumbItem active>Articles</BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb />
       <Row>
         <Col sm={11}>
           <h1 className="mb-lg">Articles</h1>
