@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
-  Badge,
   Pagination,
   PaginationItem,
   PaginationLink,
@@ -42,11 +41,11 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   }
 
   return (
-    <div>
+    <div className="table-responsive" style={{ backgroundColor: "#fff" }}>
       <Table className="table-hover">
         <thead>
           <tr>
-            {headers.map(({ key, alias, width }, index) => (
+            {headers.map(({ key, alias, width }) => (
               <th key={key} style={{ width }}>
                 {alias}
               </th>
@@ -56,7 +55,7 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
         <tbody>
           {getPageData().map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {headers.map(({ key, render }, cellIndex) => (
+              {headers.map(({ key, render }) => (
                 <td key={key}>{render(row[key], row)}</td>
               ))}
             </tr>

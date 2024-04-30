@@ -68,15 +68,18 @@ const links = [
       },
     ],
   },
+  {
+    header: "Tables Basic",
+    headerLink: "/app/tables",
+    path: "tables",
+    glyph: "tables",
+    title: "tables",
+    element: <Tables />,
+  },
   //   {
   //     header: "Typography",
   //     headerLink: "/app/typography",
   //     glyph: "typography",
-  //   },
-  //   {
-  //     header: "Tables Basic",
-  //     headerLink: "/app/tables",
-  //     glyph: "tables",
   //   },
   //   {
   //     header: "Notifications",
