@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-} from "reactstrap";
+import { Table, Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -56,7 +51,7 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
           {getPageData().map((row, rowIndex) => (
             <tr key={rowIndex}>
               {headers.map(({ key, render }) => (
-                <td key={key}>{render(row[key], row)}</td>
+                <td key={key}>{render ? render(row[key], row) : row[key]}</td>
               ))}
             </tr>
           ))}

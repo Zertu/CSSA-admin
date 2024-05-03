@@ -1,21 +1,21 @@
-import axios from 'axios'
+import axios from "axios";
 
-const baseURL = 'http://localhost:4000/'
+const baseURL = "http://localhost:4000/";
 
 export async function get(url, params = null) {
-  return sendRequest('GET', url, null, params)
+  return sendRequest("GET", url, null, params);
 }
 
 export async function post(url, data, params = null) {
-  return sendRequest('POST', url, data, params)
+  return sendRequest("POST", url, data, params);
 }
 
 export async function put(url, data, params = null) {
-  return sendRequest('PUT', url, data, params)
+  return sendRequest("PUT", url, data, params);
 }
 
 export async function deleteReq(url, params = null) {
-  return sendRequest('DELETE', url, null, params)
+  return sendRequest("DELETE", url, {}, params);
 }
 
 async function sendRequest(method, url, data = null, params = null) {
@@ -25,18 +25,18 @@ async function sendRequest(method, url, data = null, params = null) {
       url: baseURL + url,
       params: params,
       data: data,
-    })
+    });
 
-    return response.data
+    return response.data;
   } catch (error) {
     if (error.response) {
-      console.log('错误响应：', error.response.data)
+      console.log("错误响应：", error.response.data);
     } else if (error.request) {
-      console.log('无响应：', error.request)
+      console.log("无响应：", error.request);
     } else {
-      console.log('请求失败：', error.message)
+      console.log("请求失败：", error.message);
     }
 
-    throw error
+    throw error;
   }
 }

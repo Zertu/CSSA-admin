@@ -13,10 +13,10 @@ const Breadcrumbs = () => {
   return (
     <ol className="breadcrumb">
       <li className="breadcrumb-item">You Are Here</li>
-      {title.map((i) => (
+      {title.map((i, index) => (
         <NavLink
           to={`/app${i.path}`}
-          key={i.headerLink}
+          key={index}
           className="active breadcrumb-item"
         >
           {i.title}
