@@ -50,7 +50,6 @@ const TagList = () => {
     onHide();
   };
   const handleDelete = (row) => {
-    console.log(row);
     Confrim({
       title: "Are you sure you want to delete this tag?",
       message: "This action cannot revert",

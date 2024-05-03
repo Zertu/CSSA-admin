@@ -11,21 +11,30 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import Widget from "@/components/Widget/Widget";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Editor from "@/components/Editor/Editor";
 
 import Breadcrumb from "@/components/Breadcrumb";
 import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
 import PlaygroundEditorTheme from "@/components/Editor/themes/PlaygroundEditorTheme";
-import { createArticle, fetchArticles, updateArticle } from "../../../actions/articles";
-import { useEffect,useRef } from "react";
+import {
+  createArticle,
+  fetchArticles,
+  updateArticle,
+} from "@/actions/articles";
+import { fetchTags } from "@/actions/tags";
+import { useEffect, useRef } from "react";
 import TagSelect from "@/components/TagSelect";
 
 function NewArticle() {
   let { id } = useParams();
   const isFetching = useSelector((state) => state.articles.isFetching);
-  const dispatch = useDispatch()
+  const tags = useSelector((state) =>
+    state.tags.tags.map((i) => ({ value: i.id, text: i.tag_name }))
+  );
+  const dispatch = useDispatch();
+
   // const posts = useSelector(state => state.articles.posts);
   const navigate = useNavigate(); // 使用 useNavigate 钩子函数
   const {
@@ -36,21 +45,29 @@ function NewArticle() {
   } = useForm({
     defaultValues: {
       title: "",
+      tags: [],
       content: "",
     },
   });
-  
+
   async function fetchData() {
     if (id) {
-      const res =await dispatch(fetchArticles(id));
+      const res = await dispatch(fetchArticles(id));
       setValue("title", res.title);
       setValue("content", res.content);
+      setValue(
+        "tags",
+        res.tags.map((i) => Number(i))
+      );
       setTimeout(() => {
-        editorRef?.current?.refreshEditor()
+        editorRef?.current?.refreshEditor();
       }, 100);
     }
   }
-  useEffect(() => {fetchData()}, []);
+  useEffect(() => {
+    fetchData();
+    dispatch(fetchTags());
+  }, []);
   const onCancel = () => {
     navigate("/app/articles"); // 返回上一页
   };
@@ -59,29 +76,28 @@ function NewArticle() {
     console.log("Publish:", data);
   };
 
-  const onSubmit =async (data) => {
-    const baseData={
-      title:data.title,
-      content:data.content,
-      draft:true,
-      tags:[],
-      summary:'',
-      images:[]
+  const onSubmit = async (data) => {
+    console.log(data);
+    const baseData = {
+      ...data,
+      draft: true,
+      summary: "",
+      images: [],
     };
-    if(id){
-    await  updateArticle({
+    if (id) {
+      await updateArticle({
         id,
         ...baseData,
-      })
-    }else{
+      });
+    } else {
       await dispatch(createArticle(baseData));
     }
-    onCancel()
+    onCancel();
   };
   const {
-    settings: { emptyEditor, },
+    settings: { emptyEditor },
   } = useSettings();
-  const editorRef= useRef();
+  const editorRef = useRef();
   const initialConfig = {
     editorState: emptyEditor,
     namespace: "Playground",
@@ -133,21 +149,17 @@ function NewArticle() {
             </Label>
             <Col sm={4} className="relative">
               <Controller
-                name="tag"
+                name="tags"
                 control={control}
                 rules={{
                   required: "This field is required",
-                  minLength: {
-                    value: 5,
-                    message: "Title must be at least 5 characters",
-                  },
                 }}
                 render={({ field }) => (
                   <TagSelect
                     id="tag"
-                    name="tag"
-                    options={[{ value:'123',text:'123'},{ value:'1234',text:'1234'}]}
-                    invalid={errors.tag}
+                    name="tags"
+                    options={tags}
+                    invalid={errors.tags}
                     placeholder="Enter Title"
                     {...field}
                   />
@@ -170,7 +182,9 @@ function NewArticle() {
                   name="content"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field }) => <Editor {...field} ref={editorRef} name="content" />}
+                  render={({ field }) => (
+                    <Editor {...field} ref={editorRef} name="content" />
+                  )}
                 />
               </LexicalComposer>
               {errors.content && (

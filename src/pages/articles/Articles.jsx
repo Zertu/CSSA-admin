@@ -6,14 +6,17 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { fetchArticles } from "../../actions/articles";
 import AdvancedTable from "@/components/Table";
+import { fetchTags } from "@/actions/tags";
 
 function Articles() {
   const router = useNavigate();
   const isFetching = useSelector((state) => state.articles.isFetching);
   const articles = useSelector((state) => state.articles.articles);
+  const tags = useSelector((state) => state.tags.tags);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchArticles());
+    dispatch(fetchTags());
   }, []);
   const handleDelete = (row) => {};
   const headers = [
@@ -23,7 +26,8 @@ function Articles() {
       key: "tags",
       alias: "标签",
       width: "15%",
-      render: (value) => value.join(", "),
+      render: (value) =>
+        value.map((i) => tags.find((j) => j.id == i)?.tag_name).join(", "),
     },
     {
       key: "draft",
@@ -64,7 +68,6 @@ function Articles() {
               编辑
             </NavLink>
             <NavLink
-              class
               onClick={() => handleDelete(row)}
               className="color-red btn-sm"
             >
