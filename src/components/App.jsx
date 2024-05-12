@@ -1,5 +1,9 @@
 import React from "react";
-import { RouterProvider, Navigate, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  Navigate,
+  createBrowserRouter,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import ErrorPage from "../pages/error/ErrorPage";
@@ -10,6 +14,7 @@ import LayoutComponent from "./Layout/Layout";
 import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 import { logoutUser } from "../actions/user";
+import NotFound from "@/pages/notFound/NotFound";
 
 const PrivateRoute = ({ dispatch, children }) => {
   if (Login.isAuthenticated(localStorage.getItem("id_token"))) {
@@ -56,8 +61,12 @@ const App = () => {
       path: "/error",
       element: <ErrorPage />,
     },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
   ];
-  const router = createBrowserRouter(routes)
+  const router = createBrowserRouter(routes);
   return (
     <div>
       <ToastContainer
