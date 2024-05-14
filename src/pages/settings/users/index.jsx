@@ -15,12 +15,12 @@ import { fetchUsers, updateUser, createUser, deleteUser } from "@/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import Confrim from "@/components/Comfirm";
 
-const TagList = () => {
+const UserList = () => {
   const fetchData = async () => {
     dispatch(fetchUsers());
   };
-  const isFetching = useSelector((state) => state.tags.isFetching);
-  const tags = useSelector((state) => state.tags.tags);
+  const isFetching = useSelector((state) => state.user.isFetching);
+  const user = useSelector((state) => state.user.users);
   const dispatch = useDispatch();
   const [currentTag, setCurrentTag] = useState({});
   const [modalShow, setModalShow] = useState(false);
@@ -76,12 +76,23 @@ const TagList = () => {
     fetchData();
   }, []);
   const headers = [
-    { key: "id", alias: "文章ID", width: "5%" },
+    { key: "displayname", alias: "昵称", width: "5%" },
     {
-      key: "tag_name",
-      alias: "标签",
+      key: "name",
+      alias: "用户名",
       width: "15%",
     },
+    {
+      key: "email",
+      alias: "邮箱",
+      width: "15%",
+    },
+    {
+      key: "last_login",
+      alias: "用户名",
+      width: "15%",
+    },
+
     {
       key: "operation",
       alias: "操作",
@@ -113,7 +124,7 @@ const TagList = () => {
     <div>
       <Breadcrumb />
       <div className="flex justify-between items-center">
-        <h1 className="page-title">Tags List</h1>
+        <h1 className="page-title">User List</h1>
         <Button color="info" size="xs" onClick={() => handleAdd()}>
           + Add User
         </Button>
@@ -154,7 +165,7 @@ const TagList = () => {
           <div>
             <AdvancedTable
               headers={headers}
-              data={tags}
+              data={user}
               isFetching={isFetching}
             />
           </div>
@@ -164,4 +175,4 @@ const TagList = () => {
   );
 };
 
-export default TagList;
+export default UserList;

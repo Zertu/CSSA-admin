@@ -4,14 +4,14 @@ import NewArticle from "@/pages/articles/NewArticle";
 import Tables from "@/pages/tables/Tables";
 import Tag from "@/pages/settings/tags";
 import Users from "@/pages/settings/users";
-import Buttons from "@/pages/buttons/Buttons";
-import Charts from "@/pages/charts/Charts";
-import Icons from "@/pages/icons/Icons";
-import Typography from "@/pages/typography/Typography";
-import Notifications from "@/pages/notifications/Notifications";
-import Posts from "@/pages/posts/Posts";
-import Profile from "@/pages/profile/Profile";
-import Privacy from "@/pages/privacy/Privacy";
+// import Buttons from "@/pages/buttons/Buttons";
+// import Charts from "@/pages/charts/Charts";
+// import Icons from "@/pages/icons/Icons";
+// import Typography from "@/pages/typography/Typography";
+// import Notifications from "@/pages/notifications/Notifications";
+// import Posts from "@/pages/posts/Posts";
+// import Profile from "@/pages/profile/Profile";
+// import Privacy from "@/pages/privacy/Privacy";
 const links = [
   {
     path: "main",
