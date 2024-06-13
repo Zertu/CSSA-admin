@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Row,
-  Col,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Grid,
   Button,
-  Input,
-} from "reactstrap";
+  DialogContentText,
+  TextField,
+  Box,
+} from "@mui/material";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdvancedTable from "@/components/Table";
 import { fetchUsers, updateUser, createUser, deleteUser } from "@/actions/user";
@@ -99,23 +100,33 @@ const UserList = () => {
       width: "10%",
       render: (value, row) => {
         return (
-          <div key={row.id} className="button-group">
-            <Button
-              color="primary"
-              onClick={() => handleEdit(row)}
-              className="btn-sm mr-1"
-            >
-              编辑
-            </Button>
-            <Button
-              color="danger"
-              onClick={() => handleDelete(row)}
-              className="btn-sm"
-              type="button"
-            >
-              删除
-            </Button>
-          </div>
+          <Box sx={{ "& button": { m: 1 } }} key={row.id}>
+            <div id="popup-root" className="button-group">
+              <Button
+                size="small"
+                variant="outlined"
+                color="success"
+                onClick={() => handleEdit(row)}
+              >
+                重置密码
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => handleEdit(row)}
+              >
+                编辑
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                color="error"
+                onClick={() => handleDelete(row)}
+              >
+                删除
+              </Button>
+            </div>
+          </Box>
         );
       },
     },
@@ -125,23 +136,26 @@ const UserList = () => {
       <Breadcrumb />
       <div className="flex justify-between items-center">
         <h1 className="page-title">User List</h1>
-        <Button color="info" size="xs" onClick={() => handleAdd()}>
+        <Button variant="contained" onClick={() => handleAdd()}>
           + Add User
         </Button>
       </div>
-      <Modal
-        keyboard={false}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        isOpen={modalShow}
-        toggle={onHide}
-        backdrop="static"
-      >
-        <ModalHeader toggle={onHide}>Edit Tag</ModalHeader>
-        <ModalBody>
-          <h4>Tag Name</h4>
-          <div>
+      <Dialog keyboard={false} size="lg" open={modalShow} onClose={onHide}>
+        <DialogTitle>Edit account</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Tag Name</DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+          {/* <div>
             <Input
               value={currentTag.tag_name}
               onChange={({ target }) => {
@@ -151,17 +165,18 @@ const UserList = () => {
                 });
               }}
             />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={onSubmit}>
+          </div> */}
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="primary" type="submit" onClick={onSubmit}>
             Submit
           </Button>
           <Button onClick={onHide}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-      <Row>
-        <Col md={12} sm={24} xs={24}>
+        </DialogActions>
+      </Dialog>
+      <Grid container>
+        <Grid item sm={24}>
           <div>
             <AdvancedTable
               headers={headers}
@@ -169,8 +184,8 @@ const UserList = () => {
               isFetching={isFetching}
             />
           </div>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
     </div>
   );
 };

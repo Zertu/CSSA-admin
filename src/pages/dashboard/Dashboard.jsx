@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import {
   Row,
   Col,
