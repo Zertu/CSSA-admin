@@ -76,10 +76,14 @@ const TagList = () => {
     fetchData();
   }, []);
   const headers = [
-    { key: "id", alias: "文章ID", width: "5%" },
     {
       key: "tag_name",
       alias: "标签",
+      width: "15%",
+    },
+    {
+      key: "tag_count",
+      alias: "标签数量",
       width: "15%",
     },
     {
