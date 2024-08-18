@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
+import Button from "@mui/material/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { fetchArticles } from "../../actions/articles";
 import AdvancedTable from "@/components/Table";
 import { fetchTags } from "@/actions/tags";
-
+import { Link } from "@mui/material";
 function Articles() {
   const router = useNavigate();
   const isFetching = useSelector((state) => state.articles.isFetching);
@@ -19,63 +19,70 @@ function Articles() {
     dispatch(fetchTags());
   }, []);
   const handleDelete = (row) => {};
+
   const headers = [
-    { key: "id", alias: "文章ID", width: "5%", render: (value) => value },
-    { key: "title", alias: "标题", width: "15%", render: (value) => value },
+    { field: "id", headerName: "文章ID", width: 170 },
+    { field: "title", headerName: "标题", width: 230 },
     {
-      key: "tags",
-      alias: "标签",
-      width: "15%",
-      render: (value) =>
-        value.map((i) => tags.find((j) => j.id == i)?.tag_name).join(", "),
-    },
-    {
-      key: "draft",
-      alias: "草稿状态",
-      width: "10%",
-      render: (value) => (value ? "是" : "否"),
-    },
-    { key: "summary", alias: "摘要", width: "15%", render: (value) => value },
-    {
-      key: "authors",
-      alias: "作者",
-      width: "10%",
-      render: (value) => value.join(", "),
-    },
-    {
-      key: "created_at",
-      alias: "创建时间",
-      width: "5%",
-      render: (value) => new Date(value).toLocaleDateString(),
-    },
-    {
-      key: "updated_at",
-      alias: "更新时间",
-      width: "5%",
-      render: (value) => new Date(value).toLocaleDateString(),
-    },
-    {
-      key: "operation",
-      alias: "操作",
-      width: "10%",
-      render: (value, row) => {
-        return (
-          <div>
-            <NavLink
-              to={`/app/articles/edit/${row.id}`}
-              className="btn-sm mr-1"
-            >
-              编辑
-            </NavLink>
-            <NavLink
-              onClick={() => handleDelete(row)}
-              className="color-red btn-sm"
-            >
-              删除
-            </NavLink>
-          </div>
-        );
+      field: "tags",
+      headerName: "标签",
+      width: 230,
+      valueGetter: (params) => {
+        const { tags } = params.row; // Assuming you have an array named 'tags' containing tag objects
+        return tags.map((tag) => tag.tag_name).join(", ");
       },
+    },
+    {
+      field: "draft",
+      headerName: "草稿状态",
+      width: 150,
+      valueGetter: (params) => (params.row.draft ? "是" : "否"),
+    },
+    { field: "summary", headerName: "摘要", width: 230 },
+    {
+      field: "authors",
+      headerName: "作者",
+      width: 150,
+      valueGetter: (params) => params.row.authors.join(", "),
+    },
+    {
+      field: "created_at",
+      headerName: "创建时间",
+      width: 150,
+      valueGetter: (params) =>
+        new Date(params.row.created_at).toLocaleDateString(),
+    },
+    {
+      field: "updated_at",
+      headerName: "更新时间",
+      width: 150,
+      valueGetter: (params) =>
+        new Date(params.row.updated_at).toLocaleDateString(),
+    },
+    {
+      field: "operation",
+      headerName: "操作",
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            href={`/app/articles/edit/${params.row.id}`}
+          >
+            编辑
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            color="error"
+            onClick={() => handleDelete(params.row)}
+          >
+            删除
+          </Button>
+        </div>
+      ),
     },
   ];
 
@@ -98,11 +105,11 @@ function Articles() {
                   <div className="mt">
                     <Button
                       onClick={addNew}
-                      size="sm"
+                      size="small"
                       color="success"
-                      className="mr-sm mb-xs"
+                      variant="contained"
                     >
-                      + New
+                      +&nbsp;New
                     </Button>
                   </div>
                 </Col>

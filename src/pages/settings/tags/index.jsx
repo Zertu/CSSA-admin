@@ -6,9 +6,9 @@ import {
   ModalFooter,
   Row,
   Col,
-  Button,
   Input,
 } from "reactstrap";
+import Button from "@mui/material/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdvancedTable from "@/components/Table";
 import { fetchTags, updateTag, createTag, deleteTag } from "@/actions/tags";
@@ -76,41 +76,33 @@ const TagList = () => {
     fetchData();
   }, []);
   const headers = [
+    { field: "tag_name", headerName: "标签", width: 230 },
+    { field: "tag_count", headerName: "标签数量", width: 150 },
     {
-      key: "tag_name",
-      alias: "标签",
-      width: "15%",
-    },
-    {
-      key: "tag_count",
-      alias: "标签数量",
-      width: "15%",
-    },
-    {
-      key: "operation",
-      alias: "操作",
-      width: "10%",
-      render: (value, row) => {
-        return (
-          <div key={row.id} className="button-group">
-            <Button
-              color="primary"
-              onClick={() => handleEdit(row)}
-              className="btn-sm mr-1"
-            >
-              编辑
-            </Button>
-            <Button
-              color="danger"
-              onClick={() => handleDelete(row)}
-              className="btn-sm"
-              type="button"
-            >
-              删除
-            </Button>
-          </div>
-        );
-      },
+      field: "operation",
+      headerName: "操作",
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => handleEdit(params.row)}
+            size="small"
+          >
+            编辑
+          </Button>
+          <Button
+            onClick={() => handleDelete(params.row)}
+            size="small"
+            variant="outlined"
+            color="error"
+            style={{ marginLeft: 8 }}
+          >
+            删除
+          </Button>
+        </div>
+      ),
     },
   ];
   return (
