@@ -1,8 +1,4 @@
-@import '../../styles/app';
-
-.root {
-  padding-top: 25vh;
-}
+@import "../../styles/app";
 
 .widget {
   max-width: 360px;
@@ -12,4 +8,12 @@
   :global .form-control {
     font-size: 14px;
   }
+}
+
+.background {
+  background-image: url(https://tu.ltyuanfang.cn/api/fengjing.php);
+  background-repeat: "no-repeat";
+  background-position: "center";
+  padding: 0 !important;
+  height: 100vh;
 }

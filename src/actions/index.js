@@ -1,4 +1,5 @@
 import axios from "axios";
+import showNotification from "../components/ShowNofication";
 
 const baseURL = "http://localhost:4000/";
 
@@ -27,13 +28,21 @@ async function sendRequest(method, url, data = null, params = null) {
       data: data,
     });
 
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     return response.data;
   } catch (error) {
     if (error.response) {
+      showNotification({ type: "error", message: error.response.data.error });
       console.log("错误响应：", error.response.data);
     } else if (error.request) {
-      console.log("无响应：", error.request);
+      showNotification({ type: "error", message: "无响应：" + error.request });
+      console.log();
     } else {
+      showNotification({
+        type: "error",
+        message: "请求失败：" + error.message,
+      });
       console.log("请求失败：", error.message);
     }
 

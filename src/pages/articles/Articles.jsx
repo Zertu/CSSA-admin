@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col } from "reactstrap";
 import Button from "@mui/material/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { fetchArticles } from "../../actions/articles";
 import AdvancedTable from "@/components/Table";
 import { fetchTags } from "@/actions/tags";
-import { Link } from "@mui/material";
+import { Grid } from "@mui/material";
 function Articles() {
   const router = useNavigate();
   const isFetching = useSelector((state) => state.articles.isFetching);
@@ -18,7 +17,9 @@ function Articles() {
     dispatch(fetchArticles());
     dispatch(fetchTags());
   }, []);
-  const handleDelete = (row) => {};
+  const handleDelete = (row) => {
+    // dispatch(delete)
+  };
 
   const headers = [
     { field: "id", headerName: "文章ID", width: 170 },
@@ -27,37 +28,40 @@ function Articles() {
       field: "tags",
       headerName: "标签",
       width: 230,
-      valueGetter: (params) => {
-        const { tags } = params.row; // Assuming you have an array named 'tags' containing tag objects
-        return tags.map((tag) => tag.tag_name).join(", ");
+      valueGetter: (_, value) => {
+        return value.tags
+          .map((tag) => tags.find((i) => i.id === tag)?.tag_name)
+          .join(", ");
       },
     },
     {
       field: "draft",
       headerName: "草稿状态",
       width: 150,
-      valueGetter: (params) => (params.row.draft ? "是" : "否"),
+      valueGetter: (_, value) => (value.draft ? "是" : "否"),
     },
     { field: "summary", headerName: "摘要", width: 230 },
     {
       field: "authors",
       headerName: "作者",
       width: 150,
-      valueGetter: (params) => params.row.authors.join(", "),
+      valueGetter: (params, value) => {
+        return value.authors.join(", ");
+      },
     },
     {
       field: "created_at",
       headerName: "创建时间",
       width: 150,
-      valueGetter: (params) =>
-        new Date(params.row.created_at).toLocaleDateString(),
+      valueFormatter: (params, value) =>
+        new Date(value.created_at).toLocaleDateString(),
     },
     {
       field: "updated_at",
       headerName: "更新时间",
       width: 150,
-      valueGetter: (params) =>
-        new Date(params.row.updated_at).toLocaleDateString(),
+      valueGetter: (params, value) =>
+        new Date(value.updated_at).toLocaleDateString(),
     },
     {
       field: "operation",
@@ -69,7 +73,7 @@ function Articles() {
             variant="contained"
             size="small"
             color="primary"
-            href={`/app/articles/edit/${params.row.id}`}
+            href={`/app/articles/edit/${params?.row.id}`}
           >
             编辑
           </Button>
@@ -77,7 +81,7 @@ function Articles() {
             variant="contained"
             size="small"
             color="error"
-            onClick={() => handleDelete(params.row)}
+            onClick={() => handleDelete(params?.row)}
           >
             删除
           </Button>
@@ -93,15 +97,15 @@ function Articles() {
   return (
     <div>
       <Breadcrumb />
-      <Row>
-        <Col sm={11}>
+      <Grid>
+        <Grid item sm={11}>
           <h1 className="mb-lg">Articles</h1>
-        </Col>
-        <Col sm={1} align-self="left">
+        </Grid>
+        <Grid item sm={1} align-self="left">
           <div className="mt mt-lg flex justify-end">
             <div className="mt-lg" title="Some standard reactstrap components">
-              <Row>
-                <Col>
+              <Grid item>
+                <Grid item>
                   <div className="mt">
                     <Button
                       onClick={addNew}
@@ -112,15 +116,15 @@ function Articles() {
                       +&nbsp;New
                     </Button>
                   </div>
-                </Col>
-              </Row>
+                </Grid>
+              </Grid>
             </div>
           </div>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
-      <Row>
-        <Col>
+      <Grid>
+        <Grid item>
           <div className="table-responsive" style={{ backgroundColor: "#fff" }}>
             <AdvancedTable
               headers={headers}
@@ -128,8 +132,8 @@ function Articles() {
               isFetching={isFetching}
             />
           </div>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
     </div>
   );
 }

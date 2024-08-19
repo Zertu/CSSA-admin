@@ -73,7 +73,6 @@ export function deleteTag(data) {
   return async (dispatch) => {
     // We dispatch requestCreateTag to kickoff the call to the API
     // dispatch(requestDeleteTag(data));
-    console.log(data);
     const response = await deleteReq(`tags/${data.id}`, data);
 
     if (!response) {

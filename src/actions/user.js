@@ -1,3 +1,4 @@
+import axios from "axios";
 import { get, post, put, deleteReq } from ".";
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -67,6 +68,21 @@ function fetchUsersError(message) {
   };
 }
 
+export function resetUser(data) {
+  return async (dispatch) => {
+    const response = await post(`users/reset`, data);
+
+    if (!response) {
+      dispatch(createUserError(response.user_name));
+      return Promise.reject("User failed to delete");
+    }
+    dispatch(createUserSuccess("User deleted successfully"));
+    setTimeout(() => {
+      dispatch(createUserInitial());
+    }, 5000);
+    return Promise.resolve("User deleted successfully");
+  };
+}
 export function deleteUser(data) {
   return async (dispatch) => {
     const response = await deleteReq(`users/${data.id}`, data);
@@ -139,12 +155,12 @@ function requestLogin(creds) {
   };
 }
 
-export function receiveLogin(user) {
+export function receiveLogin(token) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token,
+    id_token: token,
   };
 }
 
@@ -185,31 +201,25 @@ export function logoutUser() {
 
 export function loginUser(creds) {
   const config = {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    credentials: "include",
-    body: `login=${creds.login}&password=${creds.password}`,
+    username: creds.username,
+    password: creds.password,
   };
 
-  return (dispatch) => {
+  return async (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
-    dispatch(requestLogin(creds));
-    return fetch("/login", config)
-      .then((response) => response.json().then((user) => ({ user, response })))
-      .then(({ user, response }) => {
-        if (!response.ok) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(loginError(user.message));
-          return Promise.reject(user);
-        }
-        // in posts create new action and check http status, if malign logout
-        // If login was successful, set the token in local storage
-        localStorage.setItem("id_token", user.id_token);
-        // Dispatch the success action
-        dispatch(receiveLogin(user));
-        return Promise.resolve(user);
-      })
-      .catch((err) => console.error("Error: ", err));
+    dispatch(requestLogin(config));
+    const response = await post("users/login", config);
+    const token = response.data.token;
+    dispatch(receiveLogin(token));
+    localStorage.setItem("token", token);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    if (!response) {
+      // If there was a problem, we want to
+      // dispatch the error condition
+      dispatch(loginError(response));
+      return Promise.reject("Login failed");
+    }
+    return Promise.resolve("Login successfully");
   };
 }
