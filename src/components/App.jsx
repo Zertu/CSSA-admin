@@ -7,7 +7,7 @@ import {
 import { ToastContainer } from "react-toastify";
 
 import ErrorPage from "../pages/error/ErrorPage";
-
+import { useDispatch, useSelector } from "react-redux";
 import "../styles/theme.scss";
 import LayoutComponent from "./Layout/Layout";
 //import DocumentationLayoutComponent from '../documentation/DocumentationLayout';
@@ -16,8 +16,10 @@ import Register from "../pages/register/Register";
 import { logoutUser } from "../actions/user";
 import NotFound from "@/pages/notFound/NotFound";
 
-const PrivateRoute = ({ dispatch, children }) => {
-  if (Login.isAuthenticated(localStorage.getItem("id_token"))) {
+const PrivateRoute = ({ children }) => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  if (!isAuthenticated) {
     dispatch(logoutUser());
     return <Navigate to="/login" replace />;
   } else {

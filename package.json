@@ -43,6 +43,7 @@
     "katex": "^0.15.2",
     "lexical": "0.14.2",
     "lodash-es": "^4.17.21",
+    "material-ui-popup-state": "^5.1.2",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",

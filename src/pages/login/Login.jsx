@@ -11,10 +11,10 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const dispatch = useDispatch();
-
-  const state = useSelector((state) => state);
+  const router = useNavigate();
   const isFetching = useSelector((state) => state.auth.isFetching);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -29,11 +29,10 @@ const Login = () => {
     );
   };
   useEffect(() => {
-    console.log(state);
+    if (isAuthenticated) {
+      router("/app/articles");
+    }
   }, [isAuthenticated]);
-  //   changePassword = (event) => {
-  //     this.setState({ password: event.target.value });
-  //   };
   const resetPassword = () => {
     this.props.dispatch(
       resetUser({

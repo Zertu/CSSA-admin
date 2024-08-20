@@ -193,7 +193,7 @@ export function receiveLogout() {
 export function logoutUser() {
   return (dispatch) => {
     dispatch(requestLogout());
-    localStorage.removeItem("id_token");
+    localStorage.removeItem("token");
     document.cookie = "id_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     dispatch(receiveLogout());
   };

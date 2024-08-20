@@ -1,16 +1,12 @@
-/**
-  * Flatlogic Dashboards (https://flatlogic.com/admin-dashboards)
-  *
-  * Copyright © 2015-present Flatlogic, LLC. All rights reserved.
-  *
-  * This source code is licensed under the MIT license found in the
-  * LICENSE.txt file in the root directory of this source tree.
-*/
+@import "../../styles/app";
 
-@import '../../styles/app';
-
-.root {
+.nav {
   background: $navbar-bg-color;
+  height: 75px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 26px;
 
   :global {
     .input-group {
@@ -33,16 +29,19 @@
           width: 175px;
         }
 
-        &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        &::placeholder {
+          /* Chrome, Firefox, Opera, Safari 10.1+ */
           color: $gray-300;
           opacity: 1; /* Firefox */
         }
 
-        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        &:-ms-input-placeholder {
+          /* Internet Explorer 10-11 */
           color: $gray-300;
         }
 
-        &::-ms-input-placeholder { /* Microsoft Edge */
+        &::-ms-input-placeholder {
+          /* Microsoft Edge */
           color: $gray-300;
         }
 
@@ -62,7 +61,7 @@
 
         i {
           font-size: 1.25rem;
-          color: theme-color('light');
+          color: theme-color("light");
         }
       }
     }
@@ -115,7 +114,11 @@
   display: flex;
   align-items: center;
   position: relative;
-
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
   @include media-breakpoint-down(sm) {
     display: none;
   }
@@ -132,10 +135,6 @@
       box-shadow: none !important;
       outline: none;
     }
-  }
-
-  &:nth-child(n + 2) {
-    margin-left: 0.5rem;
   }
 
   &:nth-child(2) {
@@ -161,14 +160,14 @@
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background-color: theme-color('danger');
+    background-color: theme-color("danger");
   }
 }
 
 .sidebarToggler {
   display: flex;
 
-  @include media-breakpoint-up(md) {
-    display: none !important;
-  }
+  // @include media-breakpoint-up(md) {
+  //   display: none !important;
+  // }
 }

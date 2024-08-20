@@ -1,7 +1,6 @@
 import Dashboard from "@/pages/dashboard/Dashboard";
 import Articles from "@/pages/articles/Articles";
 import NewArticle from "@/pages/articles/NewArticle";
-import Tables from "@/pages/tables/Tables";
 import Tag from "@/pages/settings/tags";
 import Users from "@/pages/settings/users";
 // import Buttons from "@/pages/buttons/Buttons";
@@ -70,14 +69,14 @@ const links = [
       },
     ],
   },
-  {
-    header: "Tables Basic",
-    headerLink: "/app/tables",
-    path: "tables",
-    glyph: "tables",
-    title: "tables",
-    element: <Tables />,
-  },
+  // {
+  //   header: "Tables Basic",
+  //   headerLink: "/app/tables",
+  //   path: "tables",
+  //   glyph: "tables",
+  //   title: "tables",
+  //   element: <Tables />,
+  // },
   //   {
   //     header: "Typography",
   //     headerLink: "/app/typography",

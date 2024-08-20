@@ -12,9 +12,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import App from "./components/App";
-import config from "./config";
 import reducers from "./reducers";
-axios.defaults.baseURL = config.baseURLApi;
 axios.defaults.headers.common["Content-Type"] = "application/json";
 const token = localStorage.getItem("token");
 if (token) {
