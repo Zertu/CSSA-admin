@@ -19,7 +19,7 @@ if (token) {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 }
 
-const store = configureStore({
+export const store = configureStore({
   reducer: reducers,
 });
 

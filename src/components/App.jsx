@@ -4,7 +4,6 @@ import {
   Navigate,
   createBrowserRouter,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 import ErrorPage from "../pages/error/ErrorPage";
 import { useDispatch, useSelector } from "react-redux";
@@ -71,11 +70,6 @@ const App = () => {
   const router = createBrowserRouter(routes);
   return (
     <div>
-      <ToastContainer
-        autoClose={5000}
-        hideProgressBar
-        closeButton={<CloseButton />}
-      />
       <RouterProvider router={router} />
     </div>
   );

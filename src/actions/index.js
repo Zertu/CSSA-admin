@@ -1,5 +1,8 @@
 import axios from "axios";
 import showNotification from "../components/ShowNofication";
+import { logoutUser } from "./user";
+import { store } from "..";
+import { useNavigate } from "react-router";
 
 const baseURL = "http://localhost:4000/";
 
@@ -19,6 +22,15 @@ export async function deleteReq(url, params = null) {
   return sendRequest("DELETE", url, {}, params);
 }
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      store.dispatch(logoutUser());
+    }
+    return Promise.reject(error);
+  }
+);
 async function sendRequest(method, url, data = null, params = null) {
   try {
     const response = await axios({
