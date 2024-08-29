@@ -116,7 +116,9 @@ function NewArticle() {
               size={6}
             >
               <Stack direction="row">
-                <Label htmlFor="title">Article Title</Label>
+                <div style={{ width: 200 }}>
+                  <Label htmlFor="title">Article Title</Label>
+                </div>
 
                 <Controller
                   name="title"
@@ -155,7 +157,9 @@ function NewArticle() {
               size={6}
             >
               <Stack direction="row">
-                <Label htmlFor="title">Article Tag</Label>
+                <div style={{ width: 200 }}>
+                  <Label htmlFor="tags">Article Tag</Label>
+                </div>
                 <Controller
                   name="tags"
                   control={control}
@@ -205,7 +209,7 @@ function NewArticle() {
               <Button
                 type="submit" // 设置按钮类型为 submit
                 size="small"
-                Stackor="warning"
+                color="warning"
                 variant="contained"
                 disabled={isFetching}
                 className="mr-sm mb-xs"
@@ -216,7 +220,7 @@ function NewArticle() {
               <Button
                 type="submit" // 设置按钮类型为 submit
                 size="small"
-                Stackor="success"
+                color="success"
                 variant="contained"
                 disabled={isFetching}
                 className="mr-sm mb-xs"
@@ -227,7 +231,7 @@ function NewArticle() {
               <Button
                 onClick={onCancel}
                 size="small"
-                Stackor="info"
+                color="info"
                 variant="contained"
                 disabled={isFetching}
                 className="mr-sm mb-xs"

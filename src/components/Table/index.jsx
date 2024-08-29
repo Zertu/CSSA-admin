@@ -1,8 +1,17 @@
-import { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Pagination,
+  Box,
+  Typography,
+} from "@mui/material";
 
-// import { DataGrid } from "@mui/x-data-grid";
 function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [headers, setHeaders] = useState([]);
@@ -13,104 +22,86 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
     } else if (data.length > 0) {
       setHeaders(
         Object.keys(data[0]).map((key) => ({
-          key,
-          alias: key,
+          field: key,
+          headerName: key,
           width: "auto",
-          render: (value) => value,
         }))
       );
     }
   }, [data, userHeaders]);
 
-  function CustomNoRowsOverlay() {
-    const StyledGridOverlay = styled("div")(({ theme }) => ({
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      height: "100%",
-      "& .no-rows-primary": {
-        fill: theme.palette.mode === "light" ? "#AEB8C2" : "#3D4751",
-      },
-      "& .no-rows-secondary": {
-        fill: theme.palette.mode === "light" ? "#E8EAED" : "#1D2126",
-      },
-    }));
-    return (
-      <StyledGridOverlay>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          width={96}
-          viewBox="0 0 452 257"
-          aria-hidden
-          focusable="false"
-        >
-          <path
-            className="no-rows-primary"
-            d="M348 69c-46.392 0-84 37.608-84 84s37.608 84 84 84 84-37.608 84-84-37.608-84-84-84Zm-104 84c0-57.438 46.562-104 104-104s104 46.562 104 104-46.562 104-104 104-104-46.562-104-104Z"
-          />
-          <path
-            className="no-rows-primary"
-            d="M308.929 113.929c3.905-3.905 10.237-3.905 14.142 0l63.64 63.64c3.905 3.905 3.905 10.236 0 14.142-3.906 3.905-10.237 3.905-14.142 0l-63.64-63.64c-3.905-3.905-3.905-10.237 0-14.142Z"
-          />
-          <path
-            className="no-rows-primary"
-            d="M308.929 191.711c-3.905-3.906-3.905-10.237 0-14.142l63.64-63.64c3.905-3.905 10.236-3.905 14.142 0 3.905 3.905 3.905 10.237 0 14.142l-63.64 63.64c-3.905 3.905-10.237 3.905-14.142 0Z"
-          />
-          <path
-            className="no-rows-secondary"
-            d="M0 10C0 4.477 4.477 0 10 0h380c5.523 0 10 4.477 10 10s-4.477 10-10 10H10C4.477 20 0 15.523 0 10ZM0 59c0-5.523 4.477-10 10-10h231c5.523 0 10 4.477 10 10s-4.477 10-10 10H10C4.477 69 0 64.523 0 59ZM0 106c0-5.523 4.477-10 10-10h203c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 153c0-5.523 4.477-10 10-10h195.5c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 200c0-5.523 4.477-10 10-10h203c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 247c0-5.523 4.477-10 10-10h231c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10Z"
-          />
-        </svg>
-        <Box sx={{ mt: 2 }}>No rows</Box>
-      </StyledGridOverlay>
-    );
-  }
+  const pageCount = Math.ceil(data.length / itemsPerPage);
+
+  const getPageData = () => {
+    const start = currentPage * itemsPerPage;
+    const end = start + itemsPerPage;
+    return data.slice(start, end);
+  };
+
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value - 1);
+  };
+
   return (
-    <div className="table-responsive" style={{ backgroundColor: "#fff" }}>
-      {/* <DataGrid
-        rows={data}
-        columns={headers}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        autoHeight
-        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-        pageSizeOptions={[10, 20, 50]}
-      /> */}
-      {/* <Table className="table-hover">
-        <thead>
-          <tr>
-            {headers.map(({ key, alias, width }) => (
-              <th key={key} style={{ width }}>
-                {alias}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {getPageData().map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {headers.map(({ key, render }) => (
-                <td key={key}>{render ? render(row[key], row) : row[key]}</td>
+    <Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {headers.map(({ field, headerName, width }) => (
+                <TableCell key={field} style={{ width }}>
+                  {headerName}
+                </TableCell>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Pagination>
-        {[...Array(pageCount())].map((p, i) => (
-          <PaginationItem active={i === currentPage} key={i}>
-            <PaginationLink onClick={(e) => handlePageClick(e, i)} href="#">
-              {i + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
-      </Pagination> */}
-    </div>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {getPageData().length > 0 ? (
+              getPageData().map((row, rowIndex) => (
+                <TableRow key={rowIndex}>
+                  {headers.map(
+                    ({ field, renderCell, valueGetter, valueFormatter }) => {
+                      let cellValue = row[field];
+
+                      // 如果定义了 valueGetter，使用 valueGetter 处理值
+                      if (valueGetter) {
+                        cellValue = valueGetter({ field, row }, row);
+                      }
+
+                      // 如果定义了 valueFormatter，使用 valueFormatter 处理值
+                      if (valueFormatter) {
+                        cellValue = valueFormatter({ field, row }, row);
+                      }
+
+                      // 如果定义了 renderCell，使用 renderCell 渲染单元格
+                      return (
+                        <TableCell key={field}>
+                          {renderCell ? renderCell({ field, row }) : cellValue}
+                        </TableCell>
+                      );
+                    }
+                  )}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={headers.length}>
+                  <Typography align="center">No rows</Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {pageCount > 1 && (
+        <Pagination
+          count={pageCount}
+          page={currentPage + 1}
+          onChange={handlePageClick}
+          sx={{ mt: 2, display: "flex", justifyContent: "center" }}
+        />
+      )}
+    </Box>
   );
 }
 

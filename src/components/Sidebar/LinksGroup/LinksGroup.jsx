@@ -24,12 +24,7 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
 
   if (!childrenLinks || childrenLinks.filter((i) => i.index).length === 1) {
     return (
-      <ListItem
-        button
-        component={NavLink}
-        to={headerLink}
-        className={className}
-      >
+      <ListItem component={NavLink} to={headerLink} className={className}>
         {glyph && (
           <ListItemIcon>
             <Icon glyph={glyph} />
@@ -42,7 +37,11 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
 
   return (
     <>
-      <ListItem button onClick={() => setIsOpen(!isOpen)} className={className}>
+      <ListItem
+        selected={match}
+        onClick={() => setIsOpen(!isOpen)}
+        className={className}
+      >
         {glyph && (
           <ListItemIcon>
             <Icon glyph={glyph} />
@@ -60,7 +59,7 @@ function LinksGroup({ header, headerLink, childrenLinks, glyph, className }) {
               .filter((i) => i.show)
               .map((child) => (
                 <ListItem
-                  button
+                  selected={match}
                   key={child.title}
                   component={NavLink}
                   to={child.headerLink}

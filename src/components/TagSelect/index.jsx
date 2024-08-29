@@ -1,63 +1,99 @@
 import React, { useEffect, useRef, useImperativeHandle } from "react";
-import TomSelect from "tom-select";
-import "tom-select/dist/css/tom-select.bootstrap4.css";
+import PropTypes from "prop-types";
+import {
+  Select,
+  MenuItem,
+  Chip,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
 
 const TagSelect = React.forwardRef((props, ref) => {
-  const { options, value, onChange, name } = props;
-  const selectRef = useRef(null);
+  const { options, value, onChange, name, label } = props;
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
 
   useImperativeHandle(ref, () => ({
     get value() {
-      return selectRef.current ? selectRef.current.value : "";
+      return inputRef.current ? inputRef.current.value : "";
     },
     set value(val) {
-      if (selectRef.current && selectRef.current.tomselect) {
-        selectRef.current.tomselect.setValue(val);
+      if (inputRef.current) {
+        inputRef.current.value = val;
       }
     },
     focus: () => {
-      if (selectRef.current && selectRef.current.tomselect) {
-        const control = selectRef.current.tomselect.control;
-        if (control && control.input) {
-          control.input.focus();
-        }
+      if (inputRef.current) {
+        inputRef.current.focus();
       }
     },
   }));
 
-  useEffect(() => {
-    if (selectRef.current) {
-      const select = new TomSelect(selectRef.current, {
-        plugins: ["remove_button"],
-        create: true,
-        items: value,
-      });
-
-      options.forEach((option) => {
-        select.addOption({ value: option.value, text: option.text });
-      });
-
-      select.setValue(value);
-      return () => {
-        select.destroy();
-      };
-    }
-  }, [options, onChange]);
-
-  const handleChange = () => {
-    const values = selectRef.current.tomselect.getValue();
-    onChange(values);
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    onChange(value);
   };
+
+  const handleDelete = (deletedValue) => {
+    onChange(value.filter((val) => val !== deletedValue));
+  };
+  const getOptionText = (id) => {
+    const option = options.find((opt) => opt.value === id);
+    return option ? option.text : id;
+  };
+
   return (
-    <select
-      ref={selectRef}
-      name={name}
-      onChange={handleChange}
-      multiple
-      title="Select Tags"
-    />
+    <FormControl fullWidth variant="outlined" size="small">
+      <InputLabel>{label}</InputLabel>
+      <Select
+        label={label}
+        name={name}
+        multiple
+        value={value}
+        onChange={handleChange}
+        input={<OutlinedInput label={label} />}
+        renderValue={(selected) => (
+          <div>
+            {selected.map((val) => (
+              <Chip
+                key={val}
+                label={getOptionText(val)}
+                style={{ marginRight: 4 }}
+                onMouseDown={(event) => {
+                  event.stopPropagation();
+                }}
+                onDelete={() => handleDelete(val)}
+              />
+            ))}
+          </div>
+        )}
+        ref={inputRef}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.text}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 });
 
-TagSelect.displayName = "TagSelect"; // Add display name
+TagSelect.propTypes = {
+  options: PropTypes.array.isRequired,
+  value: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
+TagSelect.displayName = "TagSelect";
 export default TagSelect;
