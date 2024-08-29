@@ -1,19 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Col,
-  FormGroup,
-  Input,
-  Label,
-  Form,
-  FormFeedback,
-} from "reactstrap";
+import { FormControl } from "@mui/base/FormControl";
+import Label from "@/components/Label";
+import Grid from "@mui/material/Grid2";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 import { useForm, Controller } from "react-hook-form";
 import Widget from "@/components/Widget/Widget";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useNavigate, useParams } from "react-router-dom";
 import Editor from "@/components/Editor/Editor";
-
+import TextField from "@mui/material/TextField";
 import Breadcrumb from "@/components/Breadcrumb";
 import PlaygroundNodes from "@/components/Editor/nodes/PlaygroundNodes";
 import { useSettings } from "@/components/Editor/context/SettingsContext";
@@ -111,72 +107,83 @@ function NewArticle() {
     <div>
       <Breadcrumb />
       <Widget>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup row>
-            <Label for="title" sm={2}>
-              Article Title
-            </Label>
-            <Col sm={4} className="relative">
-              <Controller
-                name="title"
-                control={control}
-                rules={{
-                  required: "This field is required",
-                  minLength: {
-                    value: 5,
-                    message: "Title must be at least 5 characters",
-                  },
-                }}
-                render={({ field }) => (
-                  <Input
-                    id="title"
-                    name="title"
-                    invalid={errors.title}
-                    placeholder="Enter Title"
-                    type="text"
-                    {...field}
-                  />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={4}>
+            <Grid
+              direction="row"
+              justifyContent={"center"}
+              alignItems="center"
+              size={6}
+            >
+              <Stack direction="row">
+                <Label htmlFor="title">Article Title</Label>
+
+                <Controller
+                  name="title"
+                  control={control}
+                  rules={{
+                    required: "This field is required",
+                    minLength: {
+                      value: 5,
+                      message: "Title must be at least 5 characters",
+                    },
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      size="small"
+                      id="title"
+                      fullWidth
+                      name="title"
+                      invalid={errors.title}
+                      placeholder="Enter Title"
+                      type="text"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.title && (
+                  <FormFeedback className="" tooltip>
+                    {errors.title.message}
+                  </FormFeedback>
                 )}
-              />
-              {errors.title && (
-                <FormFeedback className="" tooltip>
-                  {errors.title.message}
-                </FormFeedback>
-              )}
-            </Col>
-            <Label for="title" sm={2}>
-              Article Tag
-            </Label>
-            <Col sm={4} className="relative">
-              <Controller
-                name="tags"
-                control={control}
-                rules={{
-                  required: "This field is required",
-                }}
-                render={({ field }) => (
-                  <TagSelect
-                    id="tag"
-                    name="tags"
-                    options={tags}
-                    invalid={errors.tags}
-                    placeholder="Enter Title"
-                    {...field}
-                  />
+              </Stack>
+            </Grid>
+            <Grid
+              direction="row"
+              justifyContent={"center"}
+              alignItems="center"
+              size={6}
+            >
+              <Stack direction="row">
+                <Label htmlFor="title">Article Tag</Label>
+                <Controller
+                  name="tags"
+                  control={control}
+                  rules={{
+                    required: "This field is required",
+                  }}
+                  render={({ field }) => (
+                    <TagSelect
+                      id="tag"
+                      name="tags"
+                      options={tags}
+                      invalid={errors.tags}
+                      placeholder="Enter Title"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.title && (
+                  <FormFeedback className="" tooltip>
+                    {errors.title.message}
+                  </FormFeedback>
                 )}
-              />
-              {errors.title && (
-                <FormFeedback className="" tooltip>
-                  {errors.title.message}
-                </FormFeedback>
-              )}
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Label for="content" sm={2}>
-              Article Contents
-            </Label>
-            <Col className="bg-white relative editor_container">
+              </Stack>
+            </Grid>
+          </Grid>
+          <Stack>
+            <Label htmlFor="content">Article Contents</Label>
+            <Stack className="bg-white relative editor_container">
               <LexicalComposer initialConfig={initialConfig}>
                 <Controller
                   name="content"
@@ -190,41 +197,46 @@ function NewArticle() {
               {errors.content && (
                 <FormFeedback>This field is required</FormFeedback>
               )}
-            </Col>
+            </Stack>
             <div></div>
-          </FormGroup>
+          </Stack>
           <div className="flex justify-end">
-            <Button
-              type="submit" // 设置按钮类型为 submit
-              size="sm"
-              color="warning"
-              disabled={isFetching}
-              className="mr-sm mb-xs"
-              onClick={handleSubmit(onSubmit)}
-            >
-              Save
-            </Button>
-            <Button
-              type="submit" // 设置按钮类型为 submit
-              size="sm"
-              color="success"
-              disabled={isFetching}
-              className="mr-sm mb-xs"
-              onClick={handleSubmit(onPublish)}
-            >
-              Publish
-            </Button>
-            <Button
-              onClick={onCancel}
-              size="sm"
-              color="info"
-              disabled={isFetching}
-              className="mr-sm mb-xs"
-            >
-              Cancel
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button
+                type="submit" // 设置按钮类型为 submit
+                size="small"
+                Stackor="warning"
+                variant="contained"
+                disabled={isFetching}
+                className="mr-sm mb-xs"
+                onClick={handleSubmit(onSubmit)}
+              >
+                Save
+              </Button>
+              <Button
+                type="submit" // 设置按钮类型为 submit
+                size="small"
+                Stackor="success"
+                variant="contained"
+                disabled={isFetching}
+                className="mr-sm mb-xs"
+                onClick={handleSubmit(onPublish)}
+              >
+                Publish
+              </Button>
+              <Button
+                onClick={onCancel}
+                size="small"
+                Stackor="info"
+                variant="contained"
+                disabled={isFetching}
+                className="mr-sm mb-xs"
+              >
+                Cancel
+              </Button>
+            </Stack>
           </div>
-        </Form>
+        </form>
       </Widget>
     </div>
   );

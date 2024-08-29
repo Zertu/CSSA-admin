@@ -1,4 +1,4 @@
-@import '../../styles/app';
+@import "../../styles/app";
 
 .widget {
   display: block;
@@ -12,6 +12,4 @@
   margin-top: 0;
   margin-bottom: 1.5rem / 2;
   color: $widget-title-color;
-
-  @include clearfix();
 }

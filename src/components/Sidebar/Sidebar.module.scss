@@ -1,4 +1,4 @@
-@import '../../styles/app';
+@import "../../styles/app";
 
 .root {
   width: $sidebar-width-open;
@@ -8,6 +8,7 @@
   bottom: 0;
   background-color: $sidebar-bg-color;
   color: $sidebar-color;
+  z-index: 20;
 }
 
 .logo {

@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Row,
-  Col,
-  Input,
-} from "reactstrap";
+import Grid from "@mui/material/Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdvancedTable from "@/components/Table";
@@ -15,6 +7,12 @@ import { fetchTags, updateTag, createTag, deleteTag } from "@/actions/tags";
 import { useDispatch, useSelector } from "react-redux";
 import Confrim from "@/components/Comfirm";
 
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 const TagList = () => {
   const fetchData = async () => {
     dispatch(fetchTags());
@@ -110,11 +108,51 @@ const TagList = () => {
       <Breadcrumb />
       <div className="flex justify-between items-center">
         <h1 className="page-title">Tags List</h1>
-        <Button color="info" size="xs" onClick={() => handleAdd()}>
+        <Button color="info" size="xs" variant="contained" onClick={handleAdd}>
           + Add Tag
         </Button>
       </div>
-      <Modal
+      <Dialog
+        open={modalShow}
+        onClose={onHide}
+        PaperProps={{
+          component: "form",
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const email = formJson.email;
+            console.log(email);
+            onHide();
+          },
+        }}
+      >
+        <DialogTitle>Edit Tag</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Please input new tag Name</DialogContentText>
+          <TextField
+            autoFocus
+            required
+            value={currentTag.tag_name}
+            onChange={({ target }) => {
+              setCurrentTag({
+                ...currentTag,
+                tag_name: target.value,
+              });
+            }}
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onHide}>Cancel</Button>
+          <Button type="submit" onClick={onSubmit}>
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* <Modal
         keyboard={false}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -144,18 +182,17 @@ const TagList = () => {
           </Button>
           <Button onClick={onHide}>Cancel</Button>
         </ModalFooter>
-      </Modal>
-      <Row>
-        <Col md={12} sm={24} xs={24}>
-          <div>
-            <AdvancedTable
-              headers={headers}
-              data={tags}
-              isFetching={isFetching}
-            />
-          </div>
-        </Col>
-      </Row>
+      </Modal> */}
+
+      <Grid>
+        <div className="table-responsive" style={{ backgroundColor: "#fff" }}>
+          <AdvancedTable
+            headers={headers}
+            data={tags}
+            isFetching={isFetching}
+          />
+        </div>
+      </Grid>
     </div>
   );
 };

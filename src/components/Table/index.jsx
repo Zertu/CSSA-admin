@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
 function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [headers, setHeaders] = useState([]);
@@ -69,7 +69,7 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
   }
   return (
     <div className="table-responsive" style={{ backgroundColor: "#fff" }}>
-      <DataGrid
+      {/* <DataGrid
         rows={data}
         columns={headers}
         initialState={{
@@ -80,7 +80,7 @@ function CustomTable({ data, itemsPerPage = 10, headers: userHeaders }) {
         autoHeight
         slots={{ noRowsOverlay: CustomNoRowsOverlay }}
         pageSizeOptions={[10, 20, 50]}
-      />
+      /> */}
       {/* <Table className="table-hover">
         <thead>
           <tr>

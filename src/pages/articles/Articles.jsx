@@ -103,22 +103,18 @@ function Articles() {
         </Grid>
         <Grid item sm={1} align-self="left">
           <div className="mt mt-lg flex justify-end">
-            <div className="mt-lg" title="Some standard reactstrap components">
-              <Grid item>
-                <Grid item>
-                  <div className="mt">
-                    <Button
-                      onClick={addNew}
-                      size="small"
-                      color="success"
-                      variant="contained"
-                    >
-                      +&nbsp;New
-                    </Button>
-                  </div>
-                </Grid>
-              </Grid>
-            </div>
+            <Grid item>
+              <div className="mb">
+                <Button
+                  onClick={addNew}
+                  size="small"
+                  color="success"
+                  variant="contained"
+                >
+                  +&nbsp;New
+                </Button>
+              </div>
+            </Grid>
           </div>
         </Grid>
       </Grid>

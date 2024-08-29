@@ -7,7 +7,7 @@ import photo from "../../images/photo.jpg";
 import { logoutUser } from "../../actions/user";
 import s from "./Header.module.scss";
 import { Link } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import Grid from "@mui/material/Grid2";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";

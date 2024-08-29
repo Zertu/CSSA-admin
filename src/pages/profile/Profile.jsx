@@ -1,30 +1,30 @@
-import React, {PureComponent} from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  ButtonGroup,
-  Breadcrumb,
-  BreadcrumbItem,
-} from 'reactstrap';
+import React, { PureComponent } from "react";
+// import {
+//   Row,
+//   Col,
+//   Form,
+//   FormGroup,
+//   Label,
+//   Input,
+//   Button,
+//   ButtonGroup,
+//   Breadcrumb,
+//   BreadcrumbItem,
+// } from 'reactstrap';
 
-import Widget from '../../components/Widget/Widget';
+import Widget from "../../components/Widget/Widget";
 
-import s from './Profile.module.scss';
+import s from "./Profile.module.scss";
 
 class Profile extends PureComponent {
-  onSubmit(e) { 
+  onSubmit(e) {
     e.preventDefault();
   }
 
   render() {
     return (
       <div className={s.root}>
-        <Breadcrumb>
+        {/* <Breadcrumb>
           <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
           <BreadcrumbItem active>Profile</BreadcrumbItem>
         </Breadcrumb>
@@ -67,9 +67,9 @@ class Profile extends PureComponent {
               </Form>
             </Widget>
           </Col>
-        </Row>
+        </Row> */}
       </div>
-    )
+    );
   }
 }
 

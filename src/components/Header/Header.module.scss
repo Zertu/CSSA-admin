@@ -2,7 +2,7 @@
 
 .nav {
   background: $navbar-bg-color;
-  height: 75px;
+  height: $navbar-height;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -12,22 +12,10 @@
     .input-group {
       background-color: $gray-100;
 
-      @include media-breakpoint-down(xs) {
-        display: none;
-      }
-
       input {
         background: transparent;
         border: none;
         width: 250px;
-
-        @include media-breakpoint-down(md) {
-          width: 100px;
-        }
-
-        @include media-breakpoint-down(sm) {
-          width: 175px;
-        }
 
         &::placeholder {
           /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -119,9 +107,6 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  @include media-breakpoint-down(sm) {
-    display: none;
-  }
 
   :global .btn {
     background: $white;
