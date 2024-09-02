@@ -5,7 +5,6 @@ import {
   MenuItem,
   Chip,
   FormControl,
-  InputLabel,
   OutlinedInput,
 } from "@mui/material";
 
@@ -52,9 +51,7 @@ const TagSelect = React.forwardRef((props, ref) => {
 
   return (
     <FormControl fullWidth variant="outlined" size="small">
-      <InputLabel>{label}</InputLabel>
       <Select
-        label={label}
         name={name}
         multiple
         value={value}
@@ -64,6 +61,7 @@ const TagSelect = React.forwardRef((props, ref) => {
           <div>
             {selected.map((val) => (
               <Chip
+                size="small"
                 key={val}
                 label={getOptionText(val)}
                 style={{ marginRight: 4 }}
@@ -75,7 +73,6 @@ const TagSelect = React.forwardRef((props, ref) => {
             ))}
           </div>
         )}
-        ref={inputRef}
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>
@@ -92,7 +89,6 @@ TagSelect.propTypes = {
   value: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 TagSelect.displayName = "TagSelect";

@@ -1,4 +1,4 @@
-import { get, post, put } from ".";
+import { deleteReq, get, post, put } from ".";
 
 export const CREATE_ARTICLE_INITIAL = "CREATE_ARTICLE_INITIAL";
 export const CREATE_ARTICLE_REQUEST = "CREATE_ARTICLE_REQUEST";
@@ -60,6 +60,10 @@ function fetchArticlesError(message) {
     isFetching: false,
     message,
   };
+}
+
+export function deleteArticle(data) {
+  deleteReq(`articles/${data}`);
 }
 export function updateArticle(data) {
   put(`articles/${data.id}`, data);

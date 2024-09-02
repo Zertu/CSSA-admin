@@ -111,7 +111,6 @@ const Editor = React.forwardRef(({ onChange, onBlur, value }: { onChange: Functi
         $getRoot().select();
         // Insert them at a selection.
         const selection = $getSelection();
-        console.log(selection)
         if (selection) {
         $getRoot().clear();
           selection.insertNodes(nodes);

@@ -10,6 +10,8 @@
   transition: left 0.3s ease-in-out, right 0.3s ease-in-out;
   left: $sidebar-width-open;
   right: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebarOpen {
@@ -19,6 +21,7 @@
 
 .content {
   min-height: 100%;
+  flex: 1;
   // 20px for footer height
   padding: #{$content-padding-vertical} $content-padding-horizontal ($content-padding-vertical +
         20px);

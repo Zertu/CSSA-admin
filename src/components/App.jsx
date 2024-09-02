@@ -25,11 +25,6 @@ const PrivateRoute = ({ children }) => {
     return children;
   }
 };
-
-const CloseButton = ({ closeToast }) => (
-  <i onClick={closeToast} className="la la-close notifications-close" />
-);
-
 const App = () => {
   const routes = [
     {

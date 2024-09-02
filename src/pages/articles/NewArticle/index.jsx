@@ -19,6 +19,7 @@ import {
   fetchArticles,
   updateArticle,
 } from "@/actions/articles";
+import { Popper } from "@mui/base/Popper";
 import { fetchTags } from "@/actions/tags";
 import { useEffect, useRef } from "react";
 import TagSelect from "@/components/TagSelect";
@@ -26,9 +27,10 @@ import TagSelect from "@/components/TagSelect";
 function NewArticle() {
   let { id } = useParams();
   const isFetching = useSelector((state) => state.articles.isFetching);
-  const tags = useSelector((state) =>
-    state.tags.tags.map((i) => ({ value: i.id, text: i.tag_name }))
-  );
+  const tags = useSelector((state) => state.tags.tags).map((i) => ({
+    value: i.id,
+    text: i.tag_name,
+  }));
   const dispatch = useDispatch();
 
   // const posts = useSelector(state => state.articles.posts);
@@ -51,10 +53,7 @@ function NewArticle() {
       const res = await dispatch(fetchArticles(id));
       setValue("title", res.title);
       setValue("content", res.content);
-      setValue(
-        "tags",
-        res.tags.map((i) => Number(i))
-      );
+      setValue("tags", res.tags);
       setTimeout(() => {
         editorRef?.current?.refreshEditor();
       }, 100);
@@ -73,7 +72,6 @@ function NewArticle() {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     const baseData = {
       ...data,
       draft: true,
@@ -115,9 +113,11 @@ function NewArticle() {
               alignItems="center"
               size={6}
             >
-              <Stack direction="row">
-                <div style={{ width: 200 }}>
-                  <Label htmlFor="title">Article Title</Label>
+              <div className="flex">
+                <div className="flex items-center	" style={{ width: 200 }}>
+                  <Label required htmlFor="title">
+                    Article Title
+                  </Label>
                 </div>
 
                 <Controller
@@ -143,12 +143,11 @@ function NewArticle() {
                     />
                   )}
                 />
+
                 {errors.title && (
-                  <FormFeedback className="" tooltip>
-                    {errors.title.message}
-                  </FormFeedback>
+                  <Popper open={errors.title}>{errors.title.message}</Popper>
                 )}
-              </Stack>
+              </div>
             </Grid>
             <Grid
               direction="row"
@@ -156,9 +155,11 @@ function NewArticle() {
               alignItems="center"
               size={6}
             >
-              <Stack direction="row">
-                <div style={{ width: 200 }}>
-                  <Label htmlFor="tags">Article Tag</Label>
+              <div className="flex">
+                <div className="flex items-center	" style={{ width: 200 }}>
+                  <Label required htmlFor="tags">
+                    Article Tag
+                  </Label>
                 </div>
                 <Controller
                   name="tags"
@@ -177,16 +178,17 @@ function NewArticle() {
                     />
                   )}
                 />
-                {errors.title && (
-                  <FormFeedback className="" tooltip>
-                    {errors.title.message}
-                  </FormFeedback>
-                )}
-              </Stack>
+                {errors.title && <div>{errors.title.message}</div>}
+              </div>
             </Grid>
           </Grid>
           <Stack>
-            <Label htmlFor="content">Article Contents</Label>
+            <div
+              className="flex items-center	"
+              style={{ width: 200, minHeight: 37 }}
+            >
+              <Label htmlFor="content">Article Contents</Label>
+            </div>
             <Stack className="bg-white relative editor_container">
               <LexicalComposer initialConfig={initialConfig}>
                 <Controller
@@ -198,8 +200,9 @@ function NewArticle() {
                   )}
                 />
               </LexicalComposer>
+              {JSON.stringify(errors)}
               {errors.content && (
-                <FormFeedback>This field is required</FormFeedback>
+                <Popper open={errors.content}>{errors.content.message}</Popper>
               )}
             </Stack>
             <div></div>

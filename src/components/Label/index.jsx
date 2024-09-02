@@ -1,40 +1,18 @@
 import * as React from "react";
-import { useFormControlContext } from "@mui/base/FormControl";
-import { styled } from "@mui/system";
+import style from "./index.module.scss";
 import clsx from "clsx";
-const Label = styled(({ children, className }) => {
-  const formControlContext = useFormControlContext();
-  const [dirty, setDirty] = React.useState(false);
-
-  React.useEffect(() => {
-    if (formControlContext?.filled) {
-      setDirty(true);
-    }
-  }, [formControlContext]);
-
-  if (formControlContext === undefined) {
-    return <p>{children}</p>;
-  }
-
-  const { error, required, filled } = formControlContext;
-  const showRequiredError = dirty && required && !filled;
+const Label = (props) => {
+  const { children, className, error, required, filled } = props;
 
   return (
     <p
-      style={{ minWidth: 150 }}
-      className={clsx(className, error || showRequiredError ? "invalid" : "")}
+      style={{ minWidth: 120 }}
+      className={clsx(style, className, error ? "invalid" : "")}
     >
+      {required ? <span style={{ color: "red" }}> *</span> : ""}
       {children}
-      {required ? " *" : ""}
     </p>
   );
-})`
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: 0.875rem;
-  margin-bottom: 4px;
-  &.invalid {
-    color: red;
-  }
-`;
+};
 
 export default Label;

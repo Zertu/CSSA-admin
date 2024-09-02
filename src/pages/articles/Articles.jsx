@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
-import { fetchArticles } from "../../actions/articles";
+import { fetchArticles, deleteArticle } from "../../actions/articles";
 import AdvancedTable from "@/components/Table";
 import { fetchTags } from "@/actions/tags";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
 function Articles() {
   const router = useNavigate();
   const isFetching = useSelector((state) => state.articles.isFetching);
@@ -17,8 +18,9 @@ function Articles() {
     dispatch(fetchArticles());
     dispatch(fetchTags());
   }, []);
-  const handleDelete = (row) => {
-    // dispatch(delete)
+  const handleDelete = async (row) => {
+    await deleteArticle(row.id);
+    dispatch(fetchArticles());
   };
 
   const headers = [
@@ -98,23 +100,19 @@ function Articles() {
     <div>
       <Breadcrumb />
       <Grid>
-        <Grid item sm={11}>
-          <h1 className="mb-lg">Articles</h1>
-        </Grid>
+        <Typography variant="h3" gutterBottom>
+          Articles
+        </Typography>
         <Grid item sm={1} align-self="left">
-          <div className="mt mt-lg flex justify-end">
-            <Grid item>
-              <div className="mb">
-                <Button
-                  onClick={addNew}
-                  size="small"
-                  color="success"
-                  variant="contained"
-                >
-                  +&nbsp;New
-                </Button>
-              </div>
-            </Grid>
+          <div className="mb flex justify-end">
+            <Button
+              onClick={addNew}
+              size="small"
+              color="success"
+              variant="contained"
+            >
+              +&nbsp;New
+            </Button>
           </div>
         </Grid>
       </Grid>
